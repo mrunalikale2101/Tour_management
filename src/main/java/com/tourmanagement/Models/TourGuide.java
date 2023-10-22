@@ -1,4 +1,4 @@
-package com.tourmanagement.Model;
+package com.tourmanagement.Models;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -6,17 +6,21 @@ import lombok.Data;
 
 @Entity
 @Data
+@Table(name = "tour_guides")
 public class TourGuide {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(columnDefinition="TEXT")
+    @Column(nullable = false)
     private String name;
-    @Column(columnDefinition="TEXT")
+
+    @Column(nullable = false)
     private String address;
-    @Column(columnDefinition="TEXT")
+
+    @Column(nullable = false, name = "phone_number")
     private String phoneNumber;
-    @Column(columnDefinition="TEXT")
+
+    @Column(nullable = false)
     private String email;
 }
