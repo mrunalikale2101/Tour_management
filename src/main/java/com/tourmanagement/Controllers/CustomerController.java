@@ -13,6 +13,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/customers")
+@ResponseStatus(HttpStatus.OK)
 public class CustomerController {
 
     private final CustomerService customerService;
@@ -24,37 +25,38 @@ public class CustomerController {
 
     @GetMapping
     public List<Customer> getAllCustomers() {
-        return customerService.getAllCustomers();
+        List<Customer> customers = customerService.getAllCustomers();
+
+        return customers;
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<Customer> getCustomerById(@PathVariable Long id) {
-        Optional<Customer> customer = customerService.getCustomerById(id);
-        return customer.map(response -> ResponseEntity.ok().body(response))
-                .orElse(new ResponseEntity<>(HttpStatus.NOT_FOUND));
+    public Customer getCustomerById(@PathVariable Long id) {
+       Customer customer = customerService.getCustomerById(id);
+
+       return customer;
     }
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public Customer createCustomer(@RequestBody CustomerDTO customerDTO) {
-        Customer result = customerService.createCustomer(customerDTO);
-        return result;
+        Customer newCustomer = customerService.createCustomer(customerDTO);
+
+        return newCustomer;
     }
 
-    @PostMapping("/update/{id}")
-    public ResponseEntity<Customer> updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
+    @PutMapping("/{id}")
+    public Customer updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
         Customer updatedCustomer = customerService.updateCustomer(id, customerDTO);
-        if (updatedCustomer != null) {
-            return ResponseEntity.ok().body(updatedCustomer);
-        } else {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-        }
+
+        return updatedCustomer;
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteCustomer(@PathVariable Long id) {
+    public String deleteCustomer(@PathVariable Long id) {
         customerService.deleteCustomer(id);
-        return ResponseEntity.noContent().build();
+
+        return "Customer with [%S] deleted successfully!".formatted(id);
     }
 }
 
