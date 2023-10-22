@@ -2,6 +2,8 @@ package com.tourmanagement.Services;
 import com.tourmanagement.DTOs.CustomerDTO;
 import com.tourmanagement.Models.Customer;
 import com.tourmanagement.Repositorys.CustomerRepository;
+import jakarta.persistence.EntityNotFoundException;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -12,10 +14,11 @@ import java.util.Optional;
 public class CustomerService {
 
     private final CustomerRepository customerRepository;
-
+    private final ModelMapper modelMapper;
     @Autowired
-    public CustomerService(CustomerRepository customerRepository) {
+    public CustomerService(CustomerRepository customerRepository, ModelMapper modelMapper) {
         this.customerRepository = customerRepository;
+        this.modelMapper = modelMapper;
     }
 
     public List<Customer> getAllCustomers() {
@@ -23,20 +26,16 @@ public class CustomerService {
     }
 
     public Optional<Customer> getCustomerById(Long id) {
-        return customerRepository.findById(id);
+        Optional<Customer> existingCustomer = customerRepository.findById(id);
+        if (existingCustomer.isPresent()) {
+            return existingCustomer;
+        } else {
+            throw new EntityNotFoundException("No customer found with ID:  " + id);
+        }
     }
 
     public Customer createCustomer(CustomerDTO customerDTO) {
-        Customer customer = new Customer();
-        // Map fields from DTO to Customer
-        customer.setName(customerDTO.getName());
-        customer.setAddress(customerDTO.getAddress());
-        customer.setPhoneNumber(customerDTO.getPhoneNumber());
-        customer.setEmail(customerDTO.getEmail());
-        customer.setIdCard(customerDTO.getIdCard());
-        customer.setGender(customerDTO.getGender());
-        customer.setDateOfBirth(customerDTO.getDateOfBirth());
-        customer.setAvatar(customerDTO.getAvatar());
+        Customer customer = modelMapper.map(customerDTO, Customer.class);
         return customerRepository.save(customer);
     }
 
@@ -44,21 +43,20 @@ public class CustomerService {
         Optional<Customer> existingCustomer = customerRepository.findById(id);
         if (existingCustomer.isPresent()) {
             Customer customer = existingCustomer.get();
-            // Map fields from DTO to existing Customer
-            customer.setName(customerDTO.getName());
-            customer.setAddress(customerDTO.getAddress());
-            customer.setPhoneNumber(customerDTO.getPhoneNumber());
-            customer.setEmail(customerDTO.getEmail());
-            customer.setIdCard(customerDTO.getIdCard());
-            customer.setGender(customerDTO.getGender());
-            customer.setDateOfBirth(customerDTO.getDateOfBirth());
-            customer.setAvatar(customerDTO.getAvatar());
+            modelMapper.map(customerDTO, customer);
             return customerRepository.save(customer);
+        } else {
+            throw new EntityNotFoundException("No customer found with ID:  " + id);
         }
-        return null; // Không tìm thấy khách hàng cần cập nhật
     }
 
     public void deleteCustomer(Long id) {
-        customerRepository.deleteById(id);
+        Optional<Customer> existingCustomer = customerRepository.findById(id);
+        if (existingCustomer.isPresent()) {
+            customerRepository.deleteById(id);
+        } else {
+            throw new EntityNotFoundException("No customer found with ID: " + id);
+        }
     }
+
 }

@@ -39,7 +39,8 @@ public class Customer {
     private Date dateOfBirth;
 
     @Column(
-            nullable = true
+            nullable = true,
+            columnDefinition="TEXT"
     )
     private String avatar;
 }
