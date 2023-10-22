@@ -1,5 +1,6 @@
-package com.tourmanagement.Model;
+package com.tourmanagement.Models;
 
+import com.tourmanagement.Shared.Types.EnumStatusBookedTour;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -8,6 +9,7 @@ import java.util.Date;
 
 @Entity
 @Data
+@Table(name="booked_tours")
 public class BookedTour {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -21,9 +23,15 @@ public class BookedTour {
     @JoinColumn(name = "tour_id")
     private Tour tour;
 
+    @Column(
+            nullable = true,
+            name = "booking_date"
+    )
     private Date bookingDate;
-    @Column(columnDefinition="TEXT")
-    private String status;
-    @Column(columnDefinition="TEXT")
-    private String otherRequests;
+
+    @Enumerated(EnumType.STRING)
+    private EnumStatusBookedTour status;
+
+    @Column(nullable = true)
+    private String note;
 }

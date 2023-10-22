@@ -1,4 +1,4 @@
-package com.tourmanagement.Model;
+package com.tourmanagement.Models;
 
 import jakarta.persistence.*;
 import lombok.Data;
@@ -8,6 +8,7 @@ import java.util.Date;
 
 @Entity
 @Data
+@Table(name = "customer_discounts")
 public class CustomerDiscount {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -25,5 +26,9 @@ public class CustomerDiscount {
     @JoinColumn(name = "tour_id")
     private Tour tour;
 
+    @Column(
+            nullable = false,
+            name = "usage_date"
+    )
     private Date usageDate;
 }

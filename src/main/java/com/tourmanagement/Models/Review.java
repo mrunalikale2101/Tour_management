@@ -1,9 +1,10 @@
-package com.tourmanagement.Model;
+package com.tourmanagement.Models;
 
 import jakarta.persistence.*;
 import lombok.Data;
 @Entity
 @Data
+@Table(name = "reviews")
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,5 +20,7 @@ public class Review {
 
     @Column(columnDefinition="TEXT")
     private String comment;
-    private Integer rating;
+
+    @Column(columnDefinition = "DOUBLE PRECISION DEFAULT 0.0", nullable = false)
+    private Double rating;
 }

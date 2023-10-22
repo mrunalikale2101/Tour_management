@@ -1,7 +1,7 @@
-package com.tourmanagement.Service;
+package com.tourmanagement.Services;
 import com.tourmanagement.DTOs.CustomerDTO;
-import com.tourmanagement.Model.Customer;
-import com.tourmanagement.Repository.CustomerRepository;
+import com.tourmanagement.Models.Customer;
+import com.tourmanagement.Repositorys.CustomerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

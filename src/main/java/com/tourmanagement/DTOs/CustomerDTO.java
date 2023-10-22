@@ -13,10 +13,8 @@ public class CustomerDTO implements Serializable {
     private String phoneNumber;
     private String email;
     private String idCard;
-    private String gender;
+    private Boolean gender;
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date dateOfBirth;
     private String avatar;
-
-    // Constructors, getters, and setters
 }
