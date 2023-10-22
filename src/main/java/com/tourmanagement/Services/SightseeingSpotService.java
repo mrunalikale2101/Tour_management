@@ -1,5 +1,7 @@
 package com.tourmanagement.Services;
 
+import com.tourmanagement.DTOs.SightseeingSpotDTO;
+import com.tourmanagement.Models.Province;
 import com.tourmanagement.Models.SightseeingSpot;
 import com.tourmanagement.Repositorys.SightseeingSpotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -11,7 +13,7 @@ import java.util.List;
 
 @Service
 public class SightseeingSpotService {
-    private SightseeingSpotRepository sightseeingSpotRepository;
+    private final SightseeingSpotRepository sightseeingSpotRepository;
 
     @Autowired
     public SightseeingSpotService(SightseeingSpotRepository sightseeingSpotRepository) {
@@ -35,5 +37,9 @@ public class SightseeingSpotService {
         List<SightseeingSpot> sightseeingSpots = sightseeingSpotRepository.findByProvinceId(provinceId);
 
         return sightseeingSpots;
+    }
+
+    public SightseeingSpot createNewSightseeingSpot(SightseeingSpot newSightseeingSpot) {
+        return sightseeingSpotRepository.save(newSightseeingSpot);
     }
 }

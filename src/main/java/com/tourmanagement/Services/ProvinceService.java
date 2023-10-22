@@ -1,5 +1,6 @@
 package com.tourmanagement.Services;
 
+import com.tourmanagement.DTOs.SightseeingSpotDTO;
 import com.tourmanagement.Models.Province;
 import com.tourmanagement.Models.SightseeingSpot;
 import com.tourmanagement.Repositorys.ProvinceRepository;
@@ -41,5 +42,16 @@ public class ProvinceService {
         List<SightseeingSpot> sightseeingSpots = sightseeingSpotService.getSightseeingSpotsByProvinceId(id);
 
         return sightseeingSpots;
+    }
+
+    public SightseeingSpot addNewSightseeingSpot(Long provinceId, SightseeingSpotDTO sightseeingSpotDTO) {
+        Province province = getProvinceById(provinceId);
+
+        SightseeingSpot newSightseeingSpot = new SightseeingSpot();
+        newSightseeingSpot.setProvince(province);
+        newSightseeingSpot.setName(sightseeingSpotDTO.getName());
+        newSightseeingSpot.setAddress(sightseeingSpotDTO.getAddress());
+
+        return sightseeingSpotService.createNewSightseeingSpot(newSightseeingSpot);
     }
 }
