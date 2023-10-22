@@ -54,4 +54,9 @@ public class ProvinceService {
 
         return sightseeingSpotService.createNewSightseeingSpot(newSightseeingSpot);
     }
+
+    public void removeSightseeingSpot(Long provinceId, Long sightseeingId) {
+        getProvinceById(provinceId);
+        sightseeingSpotService.deleteSightseeingSpot(sightseeingId);
+    }
 }

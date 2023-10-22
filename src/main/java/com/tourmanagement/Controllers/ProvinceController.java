@@ -43,4 +43,11 @@ public class ProvinceController {
 
         return newSightseeingSpot;
     }
+
+    @DeleteMapping("/{id}/sightseeing-spots/{sightseeingId}")
+    public String handleRemoveSightseeingSpot(@PathVariable() Long id, @PathVariable() Long sightseeingId) {
+        provinceService.removeSightseeingSpot(id, sightseeingId);
+
+        return "Sightseeing spot id [%s] of province id [%s] is removed successfully!".formatted(sightseeingId, id);
+    }
 }

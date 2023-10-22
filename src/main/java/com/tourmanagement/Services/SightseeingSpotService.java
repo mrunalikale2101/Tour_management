@@ -42,4 +42,9 @@ public class SightseeingSpotService {
     public SightseeingSpot createNewSightseeingSpot(SightseeingSpot newSightseeingSpot) {
         return sightseeingSpotRepository.save(newSightseeingSpot);
     }
+
+    public void deleteSightseeingSpot(Long id) {
+        getSightSeeingSpotById(id);
+        sightseeingSpotRepository.deleteById(id);
+    }
 }
