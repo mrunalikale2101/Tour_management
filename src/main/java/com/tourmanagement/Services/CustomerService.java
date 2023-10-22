@@ -55,6 +55,7 @@ public class CustomerService {
             customer.setAvatar(customerDTO.getAvatar());
             return customerRepository.save(customer);
         }
+
         return null; // Không tìm thấy khách hàng cần cập nhật
     }
 

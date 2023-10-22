@@ -35,9 +35,10 @@ public class CustomerController {
     }
 
     @PostMapping()
-    public ResponseEntity<Customer> createCustomer(@RequestBody CustomerDTO customerDTO) {
+    @ResponseStatus(HttpStatus.CREATED)
+    public Customer createCustomer(@RequestBody CustomerDTO customerDTO) {
         Customer result = customerService.createCustomer(customerDTO);
-        return ResponseEntity.status(HttpStatus.CREATED).body(result);
+        return result;
     }
 
     @PostMapping("/update/{id}")
