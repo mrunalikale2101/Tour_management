@@ -1,5 +1,6 @@
 package com.tourmanagement.Models;
 
+import com.tourmanagement.Shared.Types.EnumTransportModeTour;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -41,8 +42,8 @@ public class Tour {
     @Column(nullable = false, name = "gathering_address")
     private String gatheringAddress;
 
-    @Column(nullable = false, name = "transportation_mode")
-    private String transportationMode;
+    @Enumerated(EnumType.STRING)
+    private EnumTransportModeTour transportationMode;
 
     @Column(columnDefinition = "json")
     private String images;
