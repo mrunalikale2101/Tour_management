@@ -1,5 +1,6 @@
 package com.tourmanagement.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -17,4 +18,9 @@ public class SightseeingSpot {
 
     @Column(nullable = false)
     private String address;
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "province_id")
+    @JsonIgnore
+    private Province province;
 }
