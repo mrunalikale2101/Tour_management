@@ -24,10 +24,8 @@ public class Tour {
     @Column(nullable = false)
     private Integer duration;
 
+    @Column(columnDefinition = "TEXT")
     private String departureLocation;
-
-    @Column(columnDefinition="TEXT")
-    private String destination;
 
     @Column(name = "available_seats", nullable = false)
     private Integer availableSeats;
@@ -60,10 +58,4 @@ public class Tour {
 
     @Column(columnDefinition = "DOUBLE PRECISION DEFAULT 0.0", nullable = false)
     private Double rating;
-
-    @ManyToMany
-    @JoinTable(name = "customer_discount_tour",
-            joinColumns = @JoinColumn(name = "tour_id"),
-            inverseJoinColumns = @JoinColumn(name = "discount_code"))
-    private Set<Discount> discounts;
 }

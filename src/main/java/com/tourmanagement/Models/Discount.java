@@ -20,6 +20,10 @@ public class Discount {
     @Column(columnDefinition = "DOUBLE PRECISION", name = "discount_percentage", nullable = false)
     private Double discountPercentage;
 
+    @ManyToOne()
+    @JoinColumn(name = "tour_id")
+    private Tour tour;
+
     @Column(
             nullable = false,
             name = "start_date"

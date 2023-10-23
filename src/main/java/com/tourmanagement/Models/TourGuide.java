@@ -23,4 +23,7 @@ public class TourGuide {
 
     @Column(nullable = false)
     private String email;
+
+    @Column(nullable = false, name = "id_card")
+    private String idCard;
 }
