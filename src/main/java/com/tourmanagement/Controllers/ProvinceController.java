@@ -50,4 +50,15 @@ public class ProvinceController {
 
         return "Sightseeing spot id [%s] of province id [%s] is removed successfully!".formatted(sightseeingId, id);
     }
+
+    @PutMapping("/{id}/sightseeing-spots/{sightseeingId}")
+    public SightseeingSpot handleUpdateSightseeingSpot(
+            @PathVariable() Long id,
+            @PathVariable() Long sightseeingId,
+            @RequestBody() @Valid() SightseeingSpotDTO sightseeingSpotDTO
+    ) {
+        SightseeingSpot updateSightseeingSpot = provinceService.updateExistedSightseeingSpot(id, sightseeingId, sightseeingSpotDTO);
+
+        return updateSightseeingSpot;
+    }
 }

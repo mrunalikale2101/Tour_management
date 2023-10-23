@@ -43,6 +43,14 @@ public class SightseeingSpotService {
         return sightseeingSpotRepository.save(newSightseeingSpot);
     }
 
+    public SightseeingSpot updateSightseeingSpot(Long id, SightseeingSpotDTO sightseeingSpotDTO) {
+        SightseeingSpot sightseeingSpotNeedUpdate = getSightSeeingSpotById(id);
+        sightseeingSpotNeedUpdate.setAddress(sightseeingSpotDTO.getAddress());
+        sightseeingSpotNeedUpdate.setName(sightseeingSpotDTO.getName());
+
+        return sightseeingSpotRepository.save(sightseeingSpotNeedUpdate);
+    }
+
     public void deleteSightseeingSpot(Long id) {
         getSightSeeingSpotById(id);
         sightseeingSpotRepository.deleteById(id);
