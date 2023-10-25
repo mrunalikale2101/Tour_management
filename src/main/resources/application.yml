@@ -17,10 +17,18 @@ spring:
   main:
     web-application-type: servlet
     banner-mode: off
+  security:
+    user:
+      alwaysGenerateLoginUsername: false
 
 logging:
   level:
     root: warn
+
+token:
+  signing:
+    key: wJ6L+8JGZFHY6iPEp7LswQqKR1HJ/XYNE8mU9L7BBCE=
+
 
 app:
   url: http://localhost:8080

@@ -1,13 +1,11 @@
 package com.tourmanagement.Controllers;
 
 import com.tourmanagement.DTOs.TourGuideDTO;
-import com.tourmanagement.Models.Tour;
 import com.tourmanagement.Models.TourGuide;
 import com.tourmanagement.Services.TourGuideService;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/tour-guides")
