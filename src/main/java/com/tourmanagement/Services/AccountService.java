@@ -28,6 +28,10 @@ public class AccountService {
         return accountRepository.save(newAccount);
     }
 
+    public Account updateAccount(Account updatedAccount) {
+        return accountRepository.save(updatedAccount);
+    }
+
     public UserDetailsService userDetailsService() {
         return new UserDetailsService() {
             @Override
@@ -38,8 +42,8 @@ public class AccountService {
                         account.getUsername(),
                         account.getPassword(),
                         true,
-                        true,
-                        true,
+                        false,
+                        false,
                         true,
                         new ArrayList<>()
                 );

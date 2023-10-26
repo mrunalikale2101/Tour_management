@@ -2,6 +2,7 @@ package com.tourmanagement.Controllers;
 
 import com.tourmanagement.DTOs.LoginDTO;
 import com.tourmanagement.DTOs.RegisterDTO;
+import com.tourmanagement.Models.Account;
 import com.tourmanagement.Services.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,10 +21,8 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public String handleLogin(@Valid @RequestBody LoginDTO loginDTO) {
-        authService.login(loginDTO);
-
-        return "Login successfully!";
+    public Account handleLogin(@Valid @RequestBody LoginDTO loginDTO) {
+        return authService.login(loginDTO);
     }
 
     @PostMapping("/register")
@@ -38,6 +37,4 @@ public class AuthController {
 
         return "Logout successfully!";
     }
-
-
 }

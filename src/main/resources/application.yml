@@ -25,9 +25,11 @@ logging:
   level:
     root: warn
 
-token:
-  signing:
-    key: wJ6L+8JGZFHY6iPEp7LswQqKR1HJ/XYNE8mU9L7BBCE=
+jwt:
+  access:
+    key: u344qp/MlRfLr2iwJbnCntS1yqUpS7EULBUkoUuU+JI=
+  refresh:
+    key: t/bl0PnTRZ1C+Qa7OrOP8MMEfU2F1kdCAy+7GKR1O+o=
 
 
 app:
