@@ -1,7 +1,10 @@
 package com.tourmanagement.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.Data;
+
+import java.util.List;
 
 
 @Entity
@@ -26,4 +29,15 @@ public class TourGuide {
 
     @Column(nullable = false, name = "id_card")
     private String idCard;
+
+    @JsonIgnore
+    @OneToMany(mappedBy = "guide", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    private List<Tour> tours;
+
+    @PreRemove
+    public void preRemove() {
+        for (Tour tour : tours) {
+            tour.setGuide(null);
+        }
+    }
 }
