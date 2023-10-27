@@ -33,7 +33,7 @@ public class DiscountService {
 
     public Discount getDiscountById(Long id) {
         Discount discount = discountRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Discount with id [%s]".formatted(id)));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Discount with id [%s] is not found".formatted(id)));
 
         return discount;
     }
@@ -42,7 +42,6 @@ public class DiscountService {
 
         // check tour exist --> get tour
 
-        System.out.println(discountDTO);
         Discount discount = modelMapper.map(discountDTO, Discount.class);
 
         return discountRepository.save(discount);
