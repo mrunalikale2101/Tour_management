@@ -41,9 +41,9 @@ public class CustomerService {
     }
 
     public Customer updateCustomer(Long id, CustomerDTO customerDTO) {
-        getCustomerById(id);
-        Customer updatedCustomer = modelMapper.map(customerDTO, Customer.class);
-        return customerRepository.save(updatedCustomer);
+        Customer oldCustomer = getCustomerById(id);
+        modelMapper.map(customerDTO, oldCustomer);
+        return customerRepository.save(oldCustomer);
     }
 
     public void deleteCustomer(Long id) {
