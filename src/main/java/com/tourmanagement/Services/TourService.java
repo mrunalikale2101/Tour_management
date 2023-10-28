@@ -6,6 +6,8 @@ import com.tourmanagement.Models.SightseeingSpot;
 import com.tourmanagement.Repositorys.TourRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.modelmapper.ModelMapper;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -50,6 +52,11 @@ public class TourService {
         return tourRepository.save(tourUpdate);
     }
 
+    public void deleteTour(Long id) {
+        getTourById(id);
+        tourRepository.deleteById(id);
+    }
+
     public List<Tour> searchTours(String name, String sightseeing, String province, Date date) {
         return tourRepository.searchTour(name, sightseeing, province, date);
     }
@@ -57,4 +64,11 @@ public class TourService {
     public List<Tour> filterToursByPrice(Double minPrice, Double maxPrice) {
         return tourRepository.findByPriceBetween(minPrice, maxPrice);
     }
+
+    public List<Tour> getTopRatedTours(int limit) {
+        Pageable pageable = PageRequest.of(0, limit);
+        List<Tour> topRatedTours = tourRepository.findTopRatedTours(pageable);
+        return topRatedTours;
+    }
+
 }

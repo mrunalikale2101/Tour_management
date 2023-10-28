@@ -50,6 +50,13 @@ public class TourController {
         return updatedTour;
     }
 
+    @DeleteMapping("/{id}")
+    public String handleDeleteTour(@PathVariable Long id) {
+        tourService.deleteTour(id);
+
+        return "Tour with [%S] deleted successfully!".formatted(id);
+    }
+
     @GetMapping("/search")
     public List<Tour> searchTours(
             @RequestParam(value = "name", required = false) String name,
@@ -66,6 +73,12 @@ public class TourController {
             @RequestParam(value = "maxPrice", required = false) Double maxPrice) {
         List<Tour> filteredTours = tourService.filterToursByPrice(minPrice, maxPrice);
         return filteredTours;
+    }
+
+    @GetMapping("/top-rating")
+    public List<Tour> getTopRatedTours() {
+        List<Tour> topRatedTours = tourService.getTopRatedTours(5);
+        return topRatedTours;
     }
 
 }

@@ -4,6 +4,7 @@ import com.tourmanagement.Models.Tour;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
+import org.springframework.data.domain.Pageable;
 
 import java.util.Date;
 import java.util.List;
@@ -21,4 +22,7 @@ public interface TourRepository extends JpaRepository<Tour, Long> {
             @Param("sightseeing") String sightseeing,
             @Param("province") String province,
             @Param("date") Date date);
+
+    @Query("SELECT t FROM Tour t ORDER BY t.rating DESC")
+    List<Tour> findTopRatedTours(Pageable pageable);
 }
