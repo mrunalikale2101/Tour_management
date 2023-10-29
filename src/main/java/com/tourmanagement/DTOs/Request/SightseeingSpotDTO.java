@@ -1,4 +1,4 @@
-package com.tourmanagement.DTOs;
+package com.tourmanagement.DTOs.Request;
 
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;

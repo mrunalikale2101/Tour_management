@@ -1,6 +1,6 @@
 package com.tourmanagement.Controllers;
 
-import com.tourmanagement.DTOs.TourGuideDTO;
+import com.tourmanagement.DTOs.Request.TourGuideDTO;
 import com.tourmanagement.Models.TourGuide;
 import com.tourmanagement.Services.TourGuideService;
 import jakarta.validation.Valid;

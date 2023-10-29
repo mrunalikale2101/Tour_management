@@ -1,8 +1,9 @@
 package com.tourmanagement.Controllers;
 
-import com.tourmanagement.DTOs.LoginDTO;
-import com.tourmanagement.DTOs.RegisterDTO;
-import com.tourmanagement.Models.Account;
+import com.tourmanagement.DTOs.Request.LoginDTO;
+import com.tourmanagement.DTOs.Request.RefreshTokenDTO;
+import com.tourmanagement.DTOs.Request.RegisterDTO;
+import com.tourmanagement.DTOs.Response.AccountRespDTO;
 import com.tourmanagement.Services.AuthService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,7 +22,7 @@ public class AuthController {
     }
 
     @PostMapping("/login")
-    public Account handleLogin(@Valid @RequestBody LoginDTO loginDTO) {
+    public AccountRespDTO handleLogin(@Valid @RequestBody LoginDTO loginDTO) {
         return authService.login(loginDTO);
     }
 
@@ -32,9 +33,15 @@ public class AuthController {
         return "Register new account successfully!";
     }
 
-    @PutMapping("/logout")
+    @PostMapping("/logout")
     public String handleLogout() {
+        authService.logout();
 
         return "Logout successfully!";
+    }
+
+    @PostMapping("/refresh-token")
+    public AccountRespDTO handleRefreshToken(@RequestBody @Valid RefreshTokenDTO refreshTokenDTO) {
+        return authService.refreshToken(refreshTokenDTO);
     }
 }

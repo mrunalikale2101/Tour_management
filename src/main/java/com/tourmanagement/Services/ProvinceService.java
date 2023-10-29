@@ -1,10 +1,9 @@
 package com.tourmanagement.Services;
 
-import com.tourmanagement.DTOs.SightseeingSpotDTO;
+import com.tourmanagement.DTOs.Request.SightseeingSpotDTO;
 import com.tourmanagement.Models.Province;
 import com.tourmanagement.Models.SightseeingSpot;
 import com.tourmanagement.Repositorys.ProvinceRepository;
-import com.tourmanagement.Repositorys.SightseeingSpotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;

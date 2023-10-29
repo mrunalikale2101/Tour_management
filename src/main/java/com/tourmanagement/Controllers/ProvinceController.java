@@ -1,6 +1,6 @@
 package com.tourmanagement.Controllers;
 
-import com.tourmanagement.DTOs.SightseeingSpotDTO;
+import com.tourmanagement.DTOs.Request.SightseeingSpotDTO;
 import com.tourmanagement.Models.Province;
 import com.tourmanagement.Models.SightseeingSpot;
 import com.tourmanagement.Services.ProvinceService;

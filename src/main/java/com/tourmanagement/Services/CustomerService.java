@@ -1,5 +1,5 @@
 package com.tourmanagement.Services;
-import com.tourmanagement.DTOs.CustomerDTO;
+import com.tourmanagement.DTOs.Response.CustomerDTO;
 import com.tourmanagement.Models.Customer;
 import com.tourmanagement.Repositorys.CustomerRepository;
 import org.modelmapper.ModelMapper;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CustomerService {
