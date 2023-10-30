@@ -2,10 +2,9 @@ package com.tourmanagement.Services;
 
 import com.tourmanagement.DTOs.TourDTO;
 import com.tourmanagement.Models.Tour;
-import com.tourmanagement.Models.SightseeingSpot;
 import com.tourmanagement.Repositorys.TourRepository;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.modelmapper.ModelMapper;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
@@ -29,6 +28,10 @@ public class TourService {
         List<Tour> tours = tourRepository.findAll();
 
         return tours;
+    }
+
+    public Long getCountTour() {
+        return tourRepository.count();
     }
 
     public Tour getTourById(Long id) {
@@ -70,5 +73,4 @@ public class TourService {
         List<Tour> topRatedTours = tourRepository.findTopRatedTours(pageable);
         return topRatedTours;
     }
-
 }

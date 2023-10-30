@@ -26,6 +26,10 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
+    public Long getCountCustomers() {
+        return customerRepository.count();
+    }
+
     public Customer getCustomerById(Long id) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer with id [%s]".formatted(id)));
