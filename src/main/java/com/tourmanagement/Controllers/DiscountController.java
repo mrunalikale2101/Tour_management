@@ -1,8 +1,6 @@
 package com.tourmanagement.Controllers;
 
-import com.tourmanagement.DTOs.CustomerDTO;
 import com.tourmanagement.DTOs.DiscountDTO;
-import com.tourmanagement.Models.Customer;
 import com.tourmanagement.Models.Discount;
 import com.tourmanagement.Services.DiscountService;
 import org.springframework.beans.factory.annotation.Autowired;

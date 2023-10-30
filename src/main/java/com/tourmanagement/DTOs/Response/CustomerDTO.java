@@ -1,4 +1,4 @@
-package com.tourmanagement.DTOs;
+package com.tourmanagement.DTOs.Response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;

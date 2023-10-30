@@ -31,11 +31,11 @@ public class Tour {
     @Column(name = "available_seats", nullable = false)
     private Integer availableSeats;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "destination_id")
     private SightseeingSpot sightseeingSpot;
 
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "guide_id")
     private TourGuide guide;
 

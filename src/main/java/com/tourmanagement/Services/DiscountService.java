@@ -1,11 +1,8 @@
 package com.tourmanagement.Services;
 
 
-import com.tourmanagement.DTOs.CustomerDTO;
 import com.tourmanagement.DTOs.DiscountDTO;
-import com.tourmanagement.Models.Customer;
 import com.tourmanagement.Models.Discount;
-import com.tourmanagement.Models.Tour;
 import com.tourmanagement.Repositorys.DiscountRepository;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +30,7 @@ public class DiscountService {
 
     public Discount getDiscountById(Long id) {
         Discount discount = discountRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Discount with id [%s]".formatted(id)));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Discount with id [%s] not found".formatted(id)));
 
         return discount;
     }
