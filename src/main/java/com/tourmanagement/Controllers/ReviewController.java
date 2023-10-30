@@ -1,6 +1,7 @@
 package com.tourmanagement.Controllers;
 
-import com.tourmanagement.DTOs.ReviewDTO;
+import com.tourmanagement.DTOs.Request.ReviewDTO;
+import com.tourmanagement.DTOs.Response.ReviewRespDTO;
 import com.tourmanagement.Models.Review;
 import com.tourmanagement.Services.ReviewService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,27 +22,39 @@ public class ReviewController {
     }
 
     @GetMapping
-    public List<Review> getAllReviews() {
-        List<Review> reviews = reviewService.getAllReviews();
+    public List<ReviewRespDTO> getAllReviews() {
+        List<ReviewRespDTO> reviews = reviewService.getAllReviews();
         return reviews;
     }
 
     @GetMapping("/{id}")
-    public Review getReviewById(@PathVariable Long id) {
-        Review review = reviewService.getReviewById(id);
+    public ReviewRespDTO getReviewById(@PathVariable Long id) {
+        ReviewRespDTO review = reviewService.getReviewResponseById(id);
         return review;
+    }
+
+    @GetMapping("/tour/{tourId}")
+    public List<ReviewRespDTO> getReviewsForTour(@PathVariable Long tourId) {
+        List<ReviewRespDTO> reviews = reviewService.getReviewsForTour(tourId);
+        return reviews;
+    }
+
+    @GetMapping("/customer/{customerId}")
+    public List<ReviewRespDTO> getReviewForCustomer(@PathVariable Long customerId) {
+        List<ReviewRespDTO> reviews = reviewService.getReviewsForCustomer(customerId);
+        return reviews;
     }
 
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
-    public Review createReview(@RequestBody ReviewDTO reviewDTO) {
-        Review newReview = reviewService.createReview(reviewDTO);
+    public ReviewRespDTO createReview(@RequestBody ReviewDTO reviewDTO) {
+        ReviewRespDTO newReview = reviewService.createReview(reviewDTO);
         return newReview;
     }
 
     @PutMapping("/{id}")
-    public Review updateReview(@PathVariable Long id, @RequestBody ReviewDTO reviewDTO) {
-        Review updatedReview = reviewService.updateReview(id, reviewDTO);
+    public ReviewRespDTO updateReview(@PathVariable Long id, @RequestBody ReviewDTO reviewDTO) {
+        ReviewRespDTO updatedReview = reviewService.updateReview(id, reviewDTO);
         return updatedReview;
     }
 
