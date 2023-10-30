@@ -37,7 +37,7 @@ public class ReviewService {
     public List<ReviewRespDTO> getAllReviews() {
         List<Review> reviews = reviewRepository.findAll();
         return reviews.stream()
-                .map(entityConverter::convertToResponseDTO)
+                .map(entityConverter::convertToReviewResponseDTO)
                 .collect(Collectors.toList());
     }
 
@@ -49,7 +49,7 @@ public class ReviewService {
 
     public ReviewRespDTO getReviewResponseById(Long id) {
         Review review = getReviewById(id);
-        return entityConverter.convertToResponseDTO(review);
+        return entityConverter.convertToReviewResponseDTO(review);
     }
 
     public ReviewRespDTO createReview(ReviewDTO reviewDTO) {
@@ -59,13 +59,13 @@ public class ReviewService {
         Review review = modelMapper.map(reviewDTO, Review.class);
         review.setCustomer(customer);
         review.setTour(tour);
-        return entityConverter.convertToResponseDTO(reviewRepository.save(review));
+        return entityConverter.convertToReviewResponseDTO(reviewRepository.save(review));
     }
 
     public ReviewRespDTO updateReview(Long id, ReviewDTO reviewDTO) {
         Review oldReview = getReviewById(id);
         modelMapper.map(reviewDTO, oldReview);
-        return entityConverter.convertToResponseDTO(reviewRepository.save(oldReview));
+        return entityConverter.convertToReviewResponseDTO(reviewRepository.save(oldReview));
     }
 
     public void deleteReview(Long id) {
@@ -77,7 +77,7 @@ public class ReviewService {
         List<Review> reviews = reviewRepository.findByTourId(tourId);
 
         return reviews.stream()
-                .map(entityConverter::convertToResponseDTO)
+                .map(entityConverter::convertToReviewResponseDTO)
                 .collect(Collectors.toList());
     }
 
@@ -85,7 +85,7 @@ public class ReviewService {
         List<Review> reviews = reviewRepository.findByCustomerId(customerId);
 
         return reviews.stream()
-                .map(entityConverter::convertToResponseDTO)
+                .map(entityConverter::convertToReviewResponseDTO)
                 .collect(Collectors.toList());
     }
 

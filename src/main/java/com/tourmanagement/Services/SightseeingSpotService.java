@@ -21,7 +21,7 @@ public class SightseeingSpotService {
 
     public SightseeingSpot getSightSeeingSpotById(Long id) {
         SightseeingSpot sightseeingSpot = sightseeingSpotRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sightseeing Spot with id [%s]".formatted(id)));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sightseeing Spot with id [%s] is not found".formatted(id)));
 
         return sightseeingSpot;
     }
