@@ -6,6 +6,7 @@ import com.tourmanagement.Models.Customer;
 import com.tourmanagement.Models.Review;
 import com.tourmanagement.Models.Tour;
 import com.tourmanagement.Repositorys.ReviewRepository;
+import com.tourmanagement.Shared.Utils.EntityDtoConverter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -22,19 +23,21 @@ public class ReviewService {
     private final CustomerService customerService;
     private final TourService tourService;
     private final ModelMapper modelMapper;
+    private final EntityDtoConverter entityConverter;
 
     @Autowired
-    public ReviewService(ReviewRepository reviewRepository, CustomerService customerService, TourService tourService, ModelMapper modelMapper) {
+    public ReviewService(ReviewRepository reviewRepository, CustomerService customerService, TourService tourService, ModelMapper modelMapper, EntityDtoConverter entityConverter) {
         this.reviewRepository = reviewRepository;
         this.customerService = customerService;
         this.tourService = tourService;
         this.modelMapper = modelMapper;
+        this.entityConverter = entityConverter;
     }
 
     public List<ReviewRespDTO> getAllReviews() {
         List<Review> reviews = reviewRepository.findAll();
         return reviews.stream()
-                .map(this::convertToResponseDTO)
+                .map(entityConverter::convertToResponseDTO)
                 .collect(Collectors.toList());
     }
 
@@ -45,9 +48,8 @@ public class ReviewService {
     }
 
     public ReviewRespDTO getReviewResponseById(Long id) {
-        Review review = reviewRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Review with id [%s] is not found".formatted(id)));
-        return convertToResponseDTO(review);
+        Review review = getReviewById(id);
+        return entityConverter.convertToResponseDTO(review);
     }
 
     public ReviewRespDTO createReview(ReviewDTO reviewDTO) {
@@ -57,13 +59,13 @@ public class ReviewService {
         Review review = modelMapper.map(reviewDTO, Review.class);
         review.setCustomer(customer);
         review.setTour(tour);
-        return convertToResponseDTO(reviewRepository.save(review));
+        return entityConverter.convertToResponseDTO(reviewRepository.save(review));
     }
 
     public ReviewRespDTO updateReview(Long id, ReviewDTO reviewDTO) {
         Review oldReview = getReviewById(id);
         modelMapper.map(reviewDTO, oldReview);
-        return convertToResponseDTO(reviewRepository.save(oldReview));
+        return entityConverter.convertToResponseDTO(reviewRepository.save(oldReview));
     }
 
     public void deleteReview(Long id) {
@@ -75,7 +77,7 @@ public class ReviewService {
         List<Review> reviews = reviewRepository.findByTourId(tourId);
 
         return reviews.stream()
-                .map(this::convertToResponseDTO)
+                .map(entityConverter::convertToResponseDTO)
                 .collect(Collectors.toList());
     }
 
@@ -83,19 +85,8 @@ public class ReviewService {
         List<Review> reviews = reviewRepository.findByCustomerId(customerId);
 
         return reviews.stream()
-                .map(this::convertToResponseDTO)
+                .map(entityConverter::convertToResponseDTO)
                 .collect(Collectors.toList());
     }
-
-    // Helper method to convert Review entity to ReviewResponseDTO
-    private ReviewRespDTO convertToResponseDTO(Review review) {
-        ReviewRespDTO dto = modelMapper.map(review, ReviewRespDTO.class);
-        dto.setCustomer(review.getCustomer());
-        dto.setTourId(review.getTour().getId());
-        return dto;
-    }
-
-
-
 
 }
