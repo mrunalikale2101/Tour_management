@@ -24,7 +24,6 @@ public class SightseeingSpotController {
     @GetMapping()
     public List<SightseeingSpot> handleGetSightseeingSpots() {
         List<SightseeingSpot> sightseeingSpots = sightseeingSpotService.getSightseeingSpots();
-
         return sightseeingSpots;
     }
 }
