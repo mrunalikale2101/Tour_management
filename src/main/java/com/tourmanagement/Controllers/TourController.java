@@ -1,15 +1,12 @@
 package com.tourmanagement.Controllers;
 
 import com.tourmanagement.DTOs.TourDTO;
-import com.tourmanagement.Models.SightseeingSpot;
 import com.tourmanagement.Models.Tour;
 import com.tourmanagement.Services.TourService;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.Date;
 import java.util.List;
 

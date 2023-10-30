@@ -1,4 +1,4 @@
-package com.tourmanagement.Shared.Utils;
+package com.tourmanagement.Shared.Configs;
 
 import org.modelmapper.ModelMapper;
 import org.modelmapper.convention.MatchingStrategies;
