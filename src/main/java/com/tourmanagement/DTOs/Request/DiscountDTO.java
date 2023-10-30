@@ -1,14 +1,16 @@
-package com.tourmanagement.DTOs;
+package com.tourmanagement.DTOs.Request;
 import com.fasterxml.jackson.annotation.JsonFormat;
-import com.tourmanagement.Models.Tour;
-import lombok.Data;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
+import jakarta.validation.constraints.Size;
+import lombok.*;
 
-import javax.validation.constraints.NotNull;
-import javax.validation.constraints.PositiveOrZero;
-import javax.validation.constraints.Size;
 import java.util.Date;
 
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 public class DiscountDTO {
 
     @NotNull(message = "Code cannot be null")

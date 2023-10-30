@@ -1,13 +1,16 @@
 package com.tourmanagement.Models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.Date;
 
 
 @Entity
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
 @Table(name = "customers")
 public class Customer {
     @Id
