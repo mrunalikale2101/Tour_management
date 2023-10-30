@@ -55,7 +55,7 @@ public class DiscountService {
 
     public List<DiscountRespDTO> getALlDiscountByTour(Long tourId){
         tourService.getTourById(tourId);
-        List<Discount> discounts = discountRepository.findALlDiscountByTour(tourId);
+        List<Discount> discounts = discountRepository.findAllDiscountByTour(tourId);
         return discounts.stream()
                 .map(entityDtoConverter::convertToDiscountRespDTO)
                 .collect(Collectors.toList());
@@ -71,7 +71,11 @@ public class DiscountService {
 
     public DiscountRespDTO updateDiscount(Long id, DiscountDTO discountDTO) {
         Discount oldDiscount = getDiscountById(id);
+        Tour tour = tourService.getTourById(discountDTO.getTourId());
+
         modelMapper.map(discountDTO, oldDiscount);
+        oldDiscount.setTour(tour);
+
         return entityDtoConverter.convertToDiscountRespDTO(discountRepository.save(oldDiscount));
     }
 

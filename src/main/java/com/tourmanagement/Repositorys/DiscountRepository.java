@@ -9,5 +9,5 @@ import java.util.List;
 public interface DiscountRepository extends JpaRepository<Discount, Long> {
 
     @Query("SELECT d FROM Discount d WHERE d.tour.id = :tourId")
-    List<Discount> findALlDiscountByTour(Long tourId);
+    List<Discount> findAllDiscountByTour(Long tourId);
 }

@@ -2,8 +2,6 @@ package com.tourmanagement.Controllers;
 
 import com.tourmanagement.DTOs.Request.DiscountDTO;
 import com.tourmanagement.DTOs.Response.DiscountRespDTO;
-import com.tourmanagement.DTOs.Response.ReviewRespDTO;
-import com.tourmanagement.Models.Discount;
 import com.tourmanagement.Services.DiscountService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

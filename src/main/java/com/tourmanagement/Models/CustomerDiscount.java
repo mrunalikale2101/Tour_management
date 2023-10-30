@@ -1,13 +1,16 @@
 package com.tourmanagement.Models;
 
 import jakarta.persistence.*;
-import lombok.Data;
+import lombok.*;
 
 import java.util.Date;
 
 
 @Entity
-@Data
+@Getter
+@Setter
+@AllArgsConstructor
+@NoArgsConstructor
 @Table(name = "customer_discounts")
 public class CustomerDiscount {
     @Id
@@ -18,7 +21,7 @@ public class CustomerDiscount {
     @JoinColumn(name = "discount_code")
     private Discount discount;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
