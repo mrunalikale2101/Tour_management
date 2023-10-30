@@ -1,9 +1,8 @@
 package com.tourmanagement.Services;
 
-import com.tourmanagement.DTOs.TourGuideDTO;
+import com.tourmanagement.DTOs.Request.TourGuideDTO;
 import com.tourmanagement.Models.TourGuide;
 import com.tourmanagement.Repositorys.TourGuideRepository;
-import com.tourmanagement.Shared.Utils.ModelMapperConfig;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;

@@ -1,15 +1,13 @@
 package com.tourmanagement.Controllers;
 
-import com.tourmanagement.DTOs.CustomerDTO;
+import com.tourmanagement.DTOs.Response.CustomerDTO;
 import com.tourmanagement.Models.Customer;
 import com.tourmanagement.Services.CustomerService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/customers")
