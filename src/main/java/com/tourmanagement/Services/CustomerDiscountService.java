@@ -102,6 +102,4 @@ public class CustomerDiscountService {
         customerDiscountRepository.deleteById(id);
     }
 
-
-
 }
