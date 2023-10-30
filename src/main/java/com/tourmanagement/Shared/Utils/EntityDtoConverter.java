@@ -1,8 +1,10 @@
 package com.tourmanagement.Shared.Utils;
 
+import com.tourmanagement.DTOs.Response.BookTourRespDTO;
 import com.tourmanagement.DTOs.Response.CustomerDiscountRespDTO;
 import com.tourmanagement.DTOs.Response.DiscountRespDTO;
 import com.tourmanagement.DTOs.Response.ReviewRespDTO;
+import com.tourmanagement.Models.BookedTour;
 import com.tourmanagement.Models.CustomerDiscount;
 import com.tourmanagement.Models.Discount;
 import com.tourmanagement.Models.Review;
@@ -40,6 +42,14 @@ public class EntityDtoConverter {
         dto.setDiscountId(customerDiscount.getDiscount().getId());
         dto.setCustomer(customerDiscount.getCustomer());
         dto.setTourId(customerDiscount.getTour().getId());
+        return dto;
+    }
+
+    public BookTourRespDTO convertToBookTourRespDTO(BookedTour bookedTour) {
+        BookTourRespDTO dto = modelMapper.map(bookedTour, BookTourRespDTO.class);
+        dto.setCustomer(bookedTour.getCustomer());
+        dto.setTourId(bookedTour.getId());
+
         return dto;
     }
 }
