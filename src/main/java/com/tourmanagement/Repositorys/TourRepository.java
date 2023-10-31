@@ -25,4 +25,7 @@ public interface TourRepository extends JpaRepository<Tour, Long> {
 
     @Query("SELECT t FROM Tour t ORDER BY t.rating DESC")
     List<Tour> findTopRatedTours(Pageable pageable);
+
+    @Query("select t from Tour t where t.departureDate <= :date")
+    List<Tour> findToDayTour(@Param("date") Date date);
 }

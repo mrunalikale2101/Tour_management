@@ -1,6 +1,7 @@
 package com.tourmanagement.Services;
 
-import com.tourmanagement.DTOs.TourDTO;
+import com.tourmanagement.DTOs.Request.TourDTO;
+import com.tourmanagement.DTOs.Response.TourRespDTO;
 import com.tourmanagement.Models.Tour;
 import com.tourmanagement.Repositorys.TourRepository;
 import org.modelmapper.ModelMapper;
@@ -13,6 +14,8 @@ import org.springframework.web.server.ResponseStatusException;
 
 import java.util.Date;
 import java.util.List;
+import java.util.stream.Collectors;
+
 @Service
 public class TourService {
     private final TourRepository tourRepository;
@@ -72,5 +75,13 @@ public class TourService {
         Pageable pageable = PageRequest.of(0, limit);
         List<Tour> topRatedTours = tourRepository.findTopRatedTours(pageable);
         return topRatedTours;
+    }
+
+    public List<TourRespDTO> getTodayTour() {
+        List<Tour> tours = tourRepository.findToDayTour(new Date());
+
+        return tours.stream()
+                .map(tour -> modelMapper.map(tour, TourRespDTO.class))
+                .collect(Collectors.toList());
     }
 }

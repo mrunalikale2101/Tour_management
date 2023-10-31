@@ -1,11 +1,13 @@
-package com.tourmanagement.DTOs;
+package com.tourmanagement.DTOs.Request;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
+import lombok.Data;
 
 
 import java.util.Date;
 
+@Data
 public class TourDTO {
     @NotNull(message = "Name cannot be null")
     private String name;
@@ -17,7 +19,7 @@ public class TourDTO {
     private Integer availableSeats;
 
     @NotNull(message = "Gathering Address cannot be null")
-    private Integer gatheringAddress;
+    private String gatheringAddress;
 
     @NotNull(message = "Price cannot be null")
     private Double price;
@@ -25,5 +27,4 @@ public class TourDTO {
     @NotNull(message = "departure Date cannot be null")
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date departureDate;
-
 }
