@@ -4,6 +4,8 @@ import com.tourmanagement.DTOs.Request.TourDTO;
 import com.tourmanagement.DTOs.Response.TourRespDTO;
 import com.tourmanagement.Models.Tour;
 import com.tourmanagement.Repositorys.TourRepository;
+import com.tourmanagement.Shared.Utils.Converter;
+import com.tourmanagement.Shared.Utils.EntityDtoConverter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -20,11 +22,13 @@ import java.util.stream.Collectors;
 public class TourService {
     private final TourRepository tourRepository;
     private final ModelMapper modelMapper;
+    private final EntityDtoConverter entityDtoConverter;
 
     @Autowired
-    public TourService(TourRepository tourRepository, ModelMapper modelMapper) {
+    public TourService(TourRepository tourRepository, ModelMapper modelMapper, EntityDtoConverter entityDtoConverter) {
         this.tourRepository = tourRepository;
         this.modelMapper = modelMapper;
+        this.entityDtoConverter = entityDtoConverter;
     }
 
     public List<Tour> getTours(){
@@ -78,10 +82,10 @@ public class TourService {
     }
 
     public List<TourRespDTO> getTodayTour() {
-        List<Tour> tours = tourRepository.findToDayTour(new Date());
+        List<Tour> tours = tourRepository.findToDayTour(Converter.convertDateUtilToSqlDate(new Date()));
 
         return tours.stream()
-                .map(tour -> modelMapper.map(tour, TourRespDTO.class))
+                .map(entityDtoConverter::convertToTourRespDTO)
                 .collect(Collectors.toList());
     }
 }

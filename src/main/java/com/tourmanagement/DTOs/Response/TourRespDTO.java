@@ -6,6 +6,7 @@ import com.tourmanagement.Shared.Types.EnumTransportModeTour;
 import lombok.Data;
 
 import java.util.Date;
+import java.util.List;
 
 @Data
 public class TourRespDTO {
@@ -19,7 +20,7 @@ public class TourRespDTO {
     private TourGuide guide;
     private String gatheringAddress;
     private EnumTransportModeTour transportationMode = EnumTransportModeTour.BUS;
-    private String images;
+    private List<String> images;
     private Integer likes;
     private Integer views;
     private Double price;
