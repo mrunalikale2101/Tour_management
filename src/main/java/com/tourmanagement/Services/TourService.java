@@ -12,8 +12,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
@@ -64,7 +67,7 @@ public class TourService {
     }
 
     public List<Tour> searchTours(String name, String sightseeing, String province, Date date) {
-        return tourRepository.searchTour(name, sightseeing, province, date);
+            return tourRepository.searchTour(name, sightseeing, province, date);
     }
 
     public List<Tour> filterToursByPrice(Double minPrice, Double maxPrice) {

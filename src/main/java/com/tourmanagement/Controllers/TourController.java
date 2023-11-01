@@ -7,6 +7,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -59,7 +61,15 @@ public class TourController {
             @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "address", required = false) String sightseeing,
             @RequestParam(value = "province", required = false) String province,
-            @RequestParam(value = "date", required = false) Date date) {
+            @RequestParam(value = "date", required = false) String dateString) {
+        Date date = null;
+        if (dateString != null) {
+            try {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                date = dateFormat.parse(dateString);
+            } catch (ParseException e) {
+            }
+        }
         List<Tour> tours = tourService.searchTours(name, sightseeing, province, date);
         return tours;
     }
