@@ -87,4 +87,8 @@ public class TourService {
                 .map(tour -> modelMapper.map(tour, TourRespDTO.class))
                 .collect(Collectors.toList());
     }
+
+    public void saveTour(Tour tour) {
+        tourRepository.save(tour);
+    }
 }

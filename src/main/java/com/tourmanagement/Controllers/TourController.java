@@ -5,18 +5,27 @@ import com.tourmanagement.Models.Tour;
 import com.tourmanagement.Services.TourService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/tours")
 @ResponseStatus(HttpStatus.OK)
 public class TourController {
     private final TourService tourService;
+    private TourDTO tourDTO;
+    private MultipartFile imageFile;
 
     public TourController(TourService tourService) {
         this.tourService = tourService;
@@ -87,5 +96,7 @@ public class TourController {
         List<Tour> topRatedTours = tourService.getTopRatedTours(5);
         return topRatedTours;
     }
+
+    
 
 }
