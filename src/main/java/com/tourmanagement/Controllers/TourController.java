@@ -1,7 +1,10 @@
 package com.tourmanagement.Controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tourmanagement.DTOs.Request.TourDTO;
 import com.tourmanagement.Models.Tour;
+import com.tourmanagement.Services.ImageService;
 import com.tourmanagement.Services.TourService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
@@ -9,9 +12,11 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -24,11 +29,13 @@ import java.util.UUID;
 @ResponseStatus(HttpStatus.OK)
 public class TourController {
     private final TourService tourService;
+    private final ImageService imageService;
     private TourDTO tourDTO;
     private MultipartFile imageFile;
 
-    public TourController(TourService tourService) {
+    public TourController(TourService tourService, ImageService imageService) {
         this.tourService = tourService;
+        this.imageService = imageService;
     }
 
     @GetMapping("/getAll")
@@ -46,8 +53,10 @@ public class TourController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Tour handleCreateNewTour(@RequestBody @Valid TourDTO tourDTO) {
+    public Tour handleCreateNewTour(@RequestPart("tourDTO") @Valid TourDTO tourDTO,
+                                    @RequestPart("images") MultipartFile file) {
         Tour createdTour = tourService.createTour(tourDTO);
+        imageService.uploadImageAndAddToTour(file, createdTour.getId());
         return createdTour;
     }
 
@@ -97,6 +106,10 @@ public class TourController {
         return topRatedTours;
     }
 
-    
+    @PostMapping("/uploads")
+    public String uploadImage(@RequestParam("images")MultipartFile file,
+                              @RequestParam(value = "id_tour", required = false) Long id) throws Exception{
+        return imageService.uploadImageAndAddToTour(file, id);
+    }
 
 }
