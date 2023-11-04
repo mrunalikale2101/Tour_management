@@ -1,23 +1,42 @@
 package com.tourmanagement.Controllers;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tourmanagement.DTOs.Request.TourDTO;
 import com.tourmanagement.Models.Tour;
+import com.tourmanagement.Services.ImageService;
 import com.tourmanagement.Services.TourService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 @RestController
 @RequestMapping("/tours")
 @ResponseStatus(HttpStatus.OK)
 public class TourController {
     private final TourService tourService;
+    private final ImageService imageService;
+    private TourDTO tourDTO;
+    private MultipartFile imageFile;
 
-    public TourController(TourService tourService) {
+    public TourController(TourService tourService, ImageService imageService) {
         this.tourService = tourService;
+        this.imageService = imageService;
     }
 
     @GetMapping("/getAll")
@@ -35,8 +54,10 @@ public class TourController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public Tour handleCreateNewTour(@RequestBody @Valid TourDTO tourDTO) {
+    public Tour handleCreateNewTour(@RequestPart("tourDTO") @Valid TourDTO tourDTO,
+                                    @RequestPart("images") MultipartFile file) {
         Tour createdTour = tourService.createTour(tourDTO);
+        imageService.uploadImageAndAddToTour(file, createdTour.getId());
         return createdTour;
     }
 
@@ -59,7 +80,15 @@ public class TourController {
             @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "address", required = false) String sightseeing,
             @RequestParam(value = "province", required = false) String province,
-            @RequestParam(value = "date", required = false) Date date) {
+            @RequestParam(value = "date", required = false) String dateString) {
+        Date date = null;
+        if (dateString != null) {
+            try {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                date = dateFormat.parse(dateString);
+            } catch (ParseException e) {
+            }
+        }
         List<Tour> tours = tourService.searchTours(name, sightseeing, province, date);
         return tours;
     }
@@ -76,6 +105,12 @@ public class TourController {
     public List<Tour> getTopRatedTours() {
         List<Tour> topRatedTours = tourService.getTopRatedTours(5);
         return topRatedTours;
+    }
+
+    @PostMapping("/uploads")
+    public String uploadImage(@RequestParam("images")MultipartFile file,
+                              @RequestParam(value = "id_tour", required = false) Long id) throws Exception{
+        return imageService.uploadImageAndAddToTour(file, id);
     }
 
 }
