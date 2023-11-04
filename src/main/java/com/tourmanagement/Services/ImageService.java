@@ -18,18 +18,35 @@ import java.util.List;
 public class ImageService {
     private final TourService tourService;
 
+    private final String path = "http://localhost:8080/api/v1/static/uploads/";
+
     public ImageService(TourService tourService) {
         this.tourService = tourService;
     }
 
     public String uploadImageAndAddToTour(MultipartFile file, Long tourId) {
         try {
-            String Path_Directory = "src/main/resources/static.uploads";
-            Files.copy(file.getInputStream(), Paths.get(Path_Directory + File.separator + file.getOriginalFilename()), StandardCopyOption.REPLACE_EXISTING);
+            String baseDirectory  = "src/main/resources/static.uploads";
+
+            String tourDirectory = baseDirectory + File.separator + tourId;
+
+            File directory = new File(tourDirectory);
+            if (!directory.exists()) {
+                directory.mkdirs();
+            }
+
+            File[] existingImages = directory.listFiles();
+
+            int newImageIndex = existingImages.length + 1;
+
+            String newFileName = newImageIndex + ".jpg";
+
+            Files.copy(file.getInputStream(), Paths.get(tourDirectory + File.separator + newFileName), StandardCopyOption.REPLACE_EXISTING);
 
             Tour tour = tourService.getTourById(tourId);
             if (tour != null) {
-                String updatedImages = updateTourImages(tour, file.getOriginalFilename());
+                String pathImage = path + tourId + "/" + newFileName;
+                String updatedImages = updateTourImages(tour, pathImage);
                 tour.setImages(updatedImages);
                 tourService.saveTour(tour);
                 return "Success!";
