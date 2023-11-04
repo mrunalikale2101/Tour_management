@@ -31,6 +31,5 @@ jwt:
   refresh:
     key: t/bl0PnTRZ1C+Qa7OrOP8MMEfU2F1kdCAy+7GKR1O+o=
 
-
 app:
   url: http://localhost:8080

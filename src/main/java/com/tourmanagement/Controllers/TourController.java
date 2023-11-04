@@ -1,29 +1,19 @@
 package com.tourmanagement.Controllers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tourmanagement.DTOs.Request.TourDTO;
+import com.tourmanagement.DTOs.Payload.TourPayload;
 import com.tourmanagement.Models.Tour;
 import com.tourmanagement.Services.ImageService;
 import com.tourmanagement.Services.TourService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
-import org.springframework.http.MediaType;
-import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
-import java.util.UUID;
 
 @RestController
 @RequestMapping("/tours")
@@ -52,13 +42,12 @@ public class TourController {
         return tour;
     }
 
-    @PostMapping()
+    @RequestMapping(value = "" , method = RequestMethod.POST, consumes = { "multipart/form-data" })
     @ResponseStatus(HttpStatus.CREATED)
-    public Tour handleCreateNewTour(@RequestPart("tourDTO") @Valid TourDTO tourDTO,
-                                    @RequestPart("images") MultipartFile file) {
-        Tour createdTour = tourService.createTour(tourDTO);
-        imageService.uploadImageAndAddToTour(file, createdTour.getId());
-        return createdTour;
+    public Tour handleCreateNewTour(@ModelAttribute TourPayload payload) {
+//        Tour createdTour = tourService.createTour(tourDTO);
+//        imageService.uploadImageAndAddToTour(file, createdTour.getId());
+        return null;
     }
 
     @PutMapping("/{id}")
