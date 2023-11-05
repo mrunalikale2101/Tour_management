@@ -24,7 +24,7 @@ public class ImageService {
         this.tourService = tourService;
     }
 
-    public String uploadImageAndAddToTour(MultipartFile file, Long tourId) {
+    public String uploadImageAndAddToTour(MultipartFile[] files, Long tourId) {
         try {
             String baseDirectory  = "src/main/resources/static.uploads";
 
@@ -39,14 +39,19 @@ public class ImageService {
 
             int newImageIndex = existingImages.length + 1;
 
-            String newFileName = newImageIndex + ".jpg";
+            List<String> newImagePaths = new ArrayList<>();
 
-            Files.copy(file.getInputStream(), Paths.get(tourDirectory + File.separator + newFileName), StandardCopyOption.REPLACE_EXISTING);
+            for (MultipartFile file : files) {
+                String newFileName = newImageIndex + ".jpg";
+                newImageIndex++;
 
+                Files.copy(file.getInputStream(), Paths.get(tourDirectory + File.separator + newFileName), StandardCopyOption.REPLACE_EXISTING);
+
+                newImagePaths.add(path + tourId + "/" + newFileName);
+            }
             Tour tour = tourService.getTourById(tourId);
             if (tour != null) {
-                String pathImage = path + tourId + "/" + newFileName;
-                String updatedImages = updateTourImages(tour, pathImage);
+                String updatedImages = updateTourImages(tour, newImagePaths);
                 tour.setImages(updatedImages);
                 tourService.saveTour(tour);
                 return "Success!";
@@ -58,7 +63,7 @@ public class ImageService {
         }
     }
 
-    private String updateTourImages(Tour tour, String newImage) {
+    private String updateTourImages(Tour tour, List<String> newImage) {
         String images = tour.getImages();
         List<String> imageList = new ArrayList<>();
         if (images != null && !images.isEmpty()) {
@@ -69,7 +74,7 @@ public class ImageService {
                 e.printStackTrace();
             }
         }
-        imageList.add(newImage);
+        imageList.addAll(newImage);
 
         try {
             return new ObjectMapper().writeValueAsString(imageList);

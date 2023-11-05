@@ -21,8 +21,6 @@ import java.util.List;
 public class TourController {
     private final TourService tourService;
     private final ImageService imageService;
-    private TourDTO tourDTO;
-    private MultipartFile imageFile;
 
     public TourController(TourService tourService, ImageService imageService) {
         this.tourService = tourService;
@@ -45,9 +43,11 @@ public class TourController {
     @RequestMapping(value = "" , method = RequestMethod.POST, consumes = { "multipart/form-data" })
     @ResponseStatus(HttpStatus.CREATED)
     public Tour handleCreateNewTour(@ModelAttribute TourPayload payload) {
-//        Tour createdTour = tourService.createTour(tourDTO);
-//        imageService.uploadImageAndAddToTour(file, createdTour.getId());
-        return null;
+        TourDTO tourDTO = new TourDTO();
+        tourDTO = payload.convertTourPayloadToTourDTO(payload);
+        Tour createdTour = tourService.createTour(tourDTO);
+        imageService.uploadImageAndAddToTour(payload.getImages(), createdTour.getId());
+        return createdTour;
     }
 
     @PutMapping("/{id}")
@@ -97,7 +97,7 @@ public class TourController {
     }
 
     @PostMapping("/uploads")
-    public String uploadImage(@RequestParam("images")MultipartFile file,
+    public String uploadImage(@RequestParam("images")MultipartFile[] file,
                               @RequestParam(value = "id_tour", required = false) Long id) throws Exception{
         return imageService.uploadImageAndAddToTour(file, id);
     }
