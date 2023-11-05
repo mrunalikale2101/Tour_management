@@ -1,10 +1,10 @@
 package com.tourmanagement.Services;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
-import com.tourmanagement.Models.Tour;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.server.ResponseStatusException;
 
 import java.io.File;
 import java.io.IOException;
@@ -16,19 +16,14 @@ import java.util.List;
 
 @Service
 public class ImageService {
-    private final TourService tourService;
+    @Value("${app.url}")
+    public String HOST;
+    private final String URL_PATH = "/api/v1/static/uploads/";
 
-    private final String path = "http://localhost:8080/api/v1/static/uploads/";
-
-    public ImageService(TourService tourService) {
-        this.tourService = tourService;
-    }
-
-    public String uploadImageAndAddToTour(MultipartFile[] files, Long tourId) {
+    public List<String> uploadMultipleImage(MultipartFile[] files, Long tourId) {
         try {
-            String baseDirectory  = "src/main/resources/static.uploads";
-
-            String tourDirectory = baseDirectory + File.separator + tourId;
+            String BASE_DIRECTORY = "src/main/resources/static/uploads";
+            String tourDirectory = BASE_DIRECTORY + File.separator + tourId;
 
             File directory = new File(tourDirectory);
             if (!directory.exists()) {
@@ -37,52 +32,40 @@ public class ImageService {
 
             File[] existingImages = directory.listFiles();
 
+            if (existingImages == null) {
+                throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Bad request!");
+            }
+
             int newImageIndex = existingImages.length + 1;
 
             List<String> newImagePaths = new ArrayList<>();
-
+            String hostUrl = HOST + URL_PATH + tourId + "/";
             for (MultipartFile file : files) {
                 String newFileName = newImageIndex + ".jpg";
                 newImageIndex++;
 
                 Files.copy(file.getInputStream(), Paths.get(tourDirectory + File.separator + newFileName), StandardCopyOption.REPLACE_EXISTING);
+                newImagePaths.add(hostUrl + newFileName);
+            }
 
-                newImagePaths.add(path + tourId + "/" + newFileName);
-            }
-            Tour tour = tourService.getTourById(tourId);
-            if (tour != null) {
-                String updatedImages = updateTourImages(tour, newImagePaths);
-                tour.setImages(updatedImages);
-                tourService.saveTour(tour);
-                return "Success!";
-            }
-            return "Tour not found";
+            return newImagePaths;
         } catch (IOException e) {
             e.printStackTrace();
-            return "Failed to upload and update the image.";
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to upload");
         }
     }
 
-    private String updateTourImages(Tour tour, List<String> newImage) {
-        String images = tour.getImages();
-        List<String> imageList = new ArrayList<>();
-        if (images != null && !images.isEmpty()) {
-            try {
-                ObjectMapper objectMapper = new ObjectMapper();
-                imageList = objectMapper.readValue(images, List.class);
-            } catch (JsonProcessingException e) {
-                e.printStackTrace();
+    public boolean isEmptyFilesArray(MultipartFile[] files) {
+        if (files == null) {
+            return true;
+        }
+
+        for (MultipartFile file : files) {
+            if (file != null && !file.isEmpty()) {
+                return false;
             }
         }
-        imageList.addAll(newImage);
 
-        try {
-            return new ObjectMapper().writeValueAsString(imageList);
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-            return "Error occurred";
-        }
+        return true;
     }
-
-
 }

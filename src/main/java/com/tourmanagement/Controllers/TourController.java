@@ -1,14 +1,12 @@
 package com.tourmanagement.Controllers;
 
-import com.tourmanagement.DTOs.Request.TourDTO;
 import com.tourmanagement.DTOs.Payload.TourPayload;
+import com.tourmanagement.DTOs.Request.TourDTO;
 import com.tourmanagement.Models.Tour;
-import com.tourmanagement.Services.ImageService;
 import com.tourmanagement.Services.TourService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
@@ -20,11 +18,9 @@ import java.util.List;
 @ResponseStatus(HttpStatus.OK)
 public class TourController {
     private final TourService tourService;
-    private final ImageService imageService;
 
-    public TourController(TourService tourService, ImageService imageService) {
+    public TourController(TourService tourService) {
         this.tourService = tourService;
-        this.imageService = imageService;
     }
 
     @GetMapping("/getAll")
@@ -42,11 +38,8 @@ public class TourController {
 
     @RequestMapping(value = "" , method = RequestMethod.POST, consumes = { "multipart/form-data" })
     @ResponseStatus(HttpStatus.CREATED)
-    public Tour handleCreateNewTour(@ModelAttribute TourPayload payload) {
-        TourDTO tourDTO = new TourDTO();
-        tourDTO = payload.convertTourPayloadToTourDTO(payload);
-        Tour createdTour = tourService.createTour(tourDTO);
-        imageService.uploadImageAndAddToTour(payload.getImages(), createdTour.getId());
+    public Tour handleCreateNewTour(@ModelAttribute @Valid TourPayload payload) {
+        Tour createdTour = tourService.createTour(payload);
         return createdTour;
     }
 
@@ -95,11 +88,4 @@ public class TourController {
         List<Tour> topRatedTours = tourService.getTopRatedTours(5);
         return topRatedTours;
     }
-
-    @PostMapping("/uploads")
-    public String uploadImage(@RequestParam("images")MultipartFile[] file,
-                              @RequestParam(value = "id_tour", required = false) Long id) throws Exception{
-        return imageService.uploadImageAndAddToTour(file, id);
-    }
-
 }

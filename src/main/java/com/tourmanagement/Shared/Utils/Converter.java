@@ -10,12 +10,18 @@ import java.util.List;
 public class Converter {
     public static List<String> convertJsonImagesToListImages(String jsonImages) {
         Gson gson = new Gson();
-        Type listType = new TypeToken<List<String>>(){}.getType();
+        Type listType = new TypeToken<List<String>>() {
+        }.getType();
 
         return gson.fromJson(jsonImages, listType);
     }
 
+    public static String convertListImagesToJson(List<String> images) {
+        Gson gson = new Gson();
+        return gson.toJson(images);
+    }
+
     public static java.sql.Date convertDateUtilToSqlDate(Date date) {
-        return  new java.sql.Date(date.getTime());
+        return new java.sql.Date(date.getTime());
     }
 }

@@ -1,5 +1,6 @@
 package com.tourmanagement.Services;
 
+import com.tourmanagement.DTOs.Payload.TourPayload;
 import com.tourmanagement.DTOs.Request.TourDTO;
 import com.tourmanagement.DTOs.Response.TourRespDTO;
 import com.tourmanagement.Models.Tour;
@@ -14,11 +15,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
-import java.util.Locale;
 import java.util.stream.Collectors;
 
 @Service
@@ -26,12 +24,14 @@ public class TourService {
     private final TourRepository tourRepository;
     private final ModelMapper modelMapper;
     private final EntityDtoConverter entityDtoConverter;
+    private final ImageService imageService;
 
     @Autowired
-    public TourService(TourRepository tourRepository, ModelMapper modelMapper, EntityDtoConverter entityDtoConverter) {
+    public TourService(TourRepository tourRepository, ModelMapper modelMapper, EntityDtoConverter entityDtoConverter, ImageService imageService) {
         this.tourRepository = tourRepository;
         this.modelMapper = modelMapper;
         this.entityDtoConverter = entityDtoConverter;
+        this.imageService = imageService;
     }
 
     public List<Tour> getTours(){
@@ -51,9 +51,19 @@ public class TourService {
         return tour;
     }
 
-    public Tour createTour(TourDTO tourDTO) {
-        Tour tour = modelMapper.map(tourDTO, Tour.class);
-        return tourRepository.save(tour);
+    public Tour createTour(TourPayload tourPayload) {
+        if(imageService.isEmptyFilesArray(tourPayload.getImages())) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "No uploaded images");
+        }
+
+        TourDTO tourDTO = tourPayload.convertTourPayloadToTourDTO();
+        Tour newTour = modelMapper.map(tourDTO, Tour.class);
+        newTour = tourRepository.save(newTour);
+
+        List<String> images = this.imageService.uploadMultipleImage(tourPayload.getImages(), newTour.getId());
+        newTour.setImages(Converter.convertListImagesToJson(images));
+
+        return tourRepository.save(newTour);
     }
 
     public Tour updateTour(Long id, TourDTO tourDTO) {
