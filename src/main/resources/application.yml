@@ -10,7 +10,7 @@ spring:
   datasource:
     url: jdbc:mysql://localhost:3306/tour_management
     username: root
-    password: minhhieu
+    password: 1234
   jpa:
     hibernate:
       ddl-auto: update
@@ -30,7 +30,6 @@ jwt:
     key: u344qp/MlRfLr2iwJbnCntS1yqUpS7EULBUkoUuU+JI=
   refresh:
     key: t/bl0PnTRZ1C+Qa7OrOP8MMEfU2F1kdCAy+7GKR1O+o=
-
 
 app:
   url: http://localhost:8080

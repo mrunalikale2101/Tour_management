@@ -5,7 +5,7 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.Set;
+import java.util.List;
 
 
 @Entity
@@ -43,20 +43,21 @@ public class Tour {
     private String gatheringAddress;
 
     @Enumerated(EnumType.STRING)
-    private EnumTransportModeTour transportationMode;
+    private EnumTransportModeTour transportationMode = EnumTransportModeTour.BUS;
 
     @Column(columnDefinition = "json")
     private String images;
 
-    @Column(nullable = false, columnDefinition = "INT DEFAULT 0")
-    private Integer likes;
+    @Column(columnDefinition = "INT DEFAULT 0")
+    private Integer likes = 0;
 
-    @Column(nullable = false, columnDefinition = "INT DEFAULT 0")
-    private Integer views;
+    @Column(columnDefinition = "INT DEFAULT 0")
+    private Integer views = 0;
 
     @Column(columnDefinition = "DOUBLE PRECISION", nullable = false)
     private Double price;
 
-    @Column(columnDefinition = "DOUBLE PRECISION DEFAULT 0.0", nullable = false)
-    private Double rating;
+    @Column(columnDefinition = "DOUBLE PRECISION DEFAULT 0.0")
+    private Double rating = 0.0;
+
 }

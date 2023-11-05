@@ -1,12 +1,10 @@
 package com.tourmanagement.Services;
 
 
-
 import com.tourmanagement.DTOs.Request.BookTourDTO;
 import com.tourmanagement.DTOs.Response.BookTourRespDTO;
-import com.tourmanagement.Models.Customer;
 import com.tourmanagement.Models.BookedTour;
-import com.tourmanagement.Models.Discount;
+import com.tourmanagement.Models.Customer;
 import com.tourmanagement.Models.Tour;
 import com.tourmanagement.Repositorys.BookTourRepository;
 import com.tourmanagement.Shared.Utils.EntityDtoConverter;
@@ -40,6 +38,10 @@ public class BookTourService {
         return bookedTours.stream()
                 .map(entityDtoConverter::convertToBookTourRespDTO)
                 .collect(Collectors.toList());
+    }
+
+    public Long getCountBookedTour() {
+        return bookTourRepository.count();
     }
 
     public BookedTour getBookedTourById(Long id) {

@@ -36,7 +36,7 @@ public class ProvinceController {
         return sightseeingSpots;
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/{id}/sightseeing-spots")
     @ResponseStatus(HttpStatus.CREATED)
     public SightseeingSpot handleAddNewSightseeingSpot(@PathVariable() Long id, @RequestBody() @Valid() SightseeingSpotDTO sightseeingSpotDTO) {
         SightseeingSpot newSightseeingSpot = provinceService.addNewSightseeingSpot(id, sightseeingSpotDTO);

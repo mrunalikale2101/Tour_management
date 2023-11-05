@@ -16,7 +16,7 @@ public interface TourRepository extends JpaRepository<Tour, Long> {
     @Query("SELECT t FROM Tour t WHERE (:name IS NULL OR t.name LIKE %:name%) " +
             "AND (:sightseeing IS NULL OR t.sightseeingSpot.name LIKE %:sightseeing%) " +
             "AND (:province IS NULL OR t.sightseeingSpot.province.name LIKE %:province%) " +
-            "AND (:date IS NULL OR t.departureDate = :date)")
+            "AND (:date IS NULL OR DATE(t.departureDate) = DATE(:date))")
     List<Tour> searchTour(
             @Param("name") String name,
             @Param("sightseeing") String sightseeing,
@@ -25,4 +25,7 @@ public interface TourRepository extends JpaRepository<Tour, Long> {
 
     @Query("SELECT t FROM Tour t ORDER BY t.rating DESC")
     List<Tour> findTopRatedTours(Pageable pageable);
+
+    @Query("select t from Tour t where DATE(t.departureDate) = :date")
+    List<Tour> findToDayTour(@Param("date") java.sql.Date date);
 }

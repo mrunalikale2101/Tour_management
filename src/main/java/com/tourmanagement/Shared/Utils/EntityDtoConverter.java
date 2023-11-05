@@ -1,16 +1,12 @@
 package com.tourmanagement.Shared.Utils;
 
-import com.tourmanagement.DTOs.Response.BookTourRespDTO;
-import com.tourmanagement.DTOs.Response.CustomerDiscountRespDTO;
-import com.tourmanagement.DTOs.Response.DiscountRespDTO;
-import com.tourmanagement.DTOs.Response.ReviewRespDTO;
-import com.tourmanagement.Models.BookedTour;
-import com.tourmanagement.Models.CustomerDiscount;
-import com.tourmanagement.Models.Discount;
-import com.tourmanagement.Models.Review;
+import com.tourmanagement.DTOs.Response.*;
+import com.tourmanagement.Models.*;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import java.util.ArrayList;
 
 @Component
 public class EntityDtoConverter {
@@ -49,6 +45,17 @@ public class EntityDtoConverter {
         BookTourRespDTO dto = modelMapper.map(bookedTour, BookTourRespDTO.class);
         dto.setCustomer(bookedTour.getCustomer());
         dto.setTourId(bookedTour.getId());
+
+        return dto;
+    }
+
+    public TourRespDTO convertToTourRespDTO(Tour tour) {
+        TourRespDTO dto = modelMapper.map(tour, TourRespDTO.class);
+        if (tour.getImages() == null) {
+            dto.setImages(new ArrayList<>());
+        } else {
+            dto.setImages(Converter.convertJsonImagesToListImages(tour.getImages()));
+        }
 
         return dto;
     }

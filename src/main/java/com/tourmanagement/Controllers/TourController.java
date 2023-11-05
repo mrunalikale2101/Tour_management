@@ -1,12 +1,15 @@
 package com.tourmanagement.Controllers;
 
-import com.tourmanagement.DTOs.TourDTO;
+import com.tourmanagement.DTOs.Payload.TourPayload;
+import com.tourmanagement.DTOs.Request.TourDTO;
 import com.tourmanagement.Models.Tour;
 import com.tourmanagement.Services.TourService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 
@@ -33,10 +36,10 @@ public class TourController {
         return tour;
     }
 
-    @PostMapping()
+    @RequestMapping(value = "" , method = RequestMethod.POST, consumes = { "multipart/form-data" })
     @ResponseStatus(HttpStatus.CREATED)
-    public Tour handleCreateNewTour(@RequestBody @Valid TourDTO tourDTO) {
-        Tour createdTour = tourService.createTour(tourDTO);
+    public Tour handleCreateNewTour(@ModelAttribute @Valid TourPayload payload) {
+        Tour createdTour = tourService.createTour(payload);
         return createdTour;
     }
 
@@ -59,7 +62,15 @@ public class TourController {
             @RequestParam(value = "name", required = false) String name,
             @RequestParam(value = "address", required = false) String sightseeing,
             @RequestParam(value = "province", required = false) String province,
-            @RequestParam(value = "date", required = false) Date date) {
+            @RequestParam(value = "date", required = false) String dateString) {
+        Date date = null;
+        if (dateString != null) {
+            try {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                date = dateFormat.parse(dateString);
+            } catch (ParseException e) {
+            }
+        }
         List<Tour> tours = tourService.searchTours(name, sightseeing, province, date);
         return tours;
     }
@@ -77,5 +88,4 @@ public class TourController {
         List<Tour> topRatedTours = tourService.getTopRatedTours(5);
         return topRatedTours;
     }
-
 }
