@@ -1,14 +1,14 @@
 package com.tourmanagement.Controllers;
 
-import com.tourmanagement.DTOs.SightseeingSpotDTO;
+import com.tourmanagement.DTOs.Request.SightseeingSpotDTO;
 import com.tourmanagement.Models.Province;
 import com.tourmanagement.Models.SightseeingSpot;
 import com.tourmanagement.Services.ProvinceService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -36,7 +36,7 @@ public class ProvinceController {
         return sightseeingSpots;
     }
 
-    @PostMapping("/{id}")
+    @PostMapping("/{id}/sightseeing-spots")
     @ResponseStatus(HttpStatus.CREATED)
     public SightseeingSpot handleAddNewSightseeingSpot(@PathVariable() Long id, @RequestBody() @Valid() SightseeingSpotDTO sightseeingSpotDTO) {
         SightseeingSpot newSightseeingSpot = provinceService.addNewSightseeingSpot(id, sightseeingSpotDTO);

@@ -14,13 +14,16 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    open-in-view: false
   main:
     web-application-type: servlet
     banner-mode: off
 
-logging:
-  level:
-    root: warn
+jwt:
+  access:
+    key: u344qp/MlRfLr2iwJbnCntS1yqUpS7EULBUkoUuU+JI=
+  refresh:
+    key: t/bl0PnTRZ1C+Qa7OrOP8MMEfU2F1kdCAy+7GKR1O+o=
 
 app:
   url: http://localhost:8080

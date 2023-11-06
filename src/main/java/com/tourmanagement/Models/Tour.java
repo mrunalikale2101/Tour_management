@@ -1,11 +1,11 @@
 package com.tourmanagement.Models;
 
 import com.tourmanagement.Shared.Types.EnumTransportModeTour;
+import com.tourmanagement.Shared.Utils.Converter;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.Set;
 
 
 @Entity
@@ -31,11 +31,11 @@ public class Tour {
     @Column(name = "available_seats", nullable = false)
     private Integer availableSeats;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "destination_id")
     private SightseeingSpot sightseeingSpot;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
     @JoinColumn(name = "guide_id")
     private TourGuide guide;
 
@@ -43,20 +43,24 @@ public class Tour {
     private String gatheringAddress;
 
     @Enumerated(EnumType.STRING)
-    private EnumTransportModeTour transportationMode;
+    private EnumTransportModeTour transportationMode = EnumTransportModeTour.BUS;
 
     @Column(columnDefinition = "json")
     private String images;
 
-    @Column(nullable = false, columnDefinition = "INT DEFAULT 0")
-    private Integer likes;
+    @Column(columnDefinition = "INT DEFAULT 0")
+    private Integer likes = 0;
 
-    @Column(nullable = false, columnDefinition = "INT DEFAULT 0")
-    private Integer views;
+    @Column(columnDefinition = "INT DEFAULT 0")
+    private Integer views = 0;
 
     @Column(columnDefinition = "DOUBLE PRECISION", nullable = false)
     private Double price;
 
-    @Column(columnDefinition = "DOUBLE PRECISION DEFAULT 0.0", nullable = false)
-    private Double rating;
+    @Column(columnDefinition = "DOUBLE PRECISION DEFAULT 0.0")
+    private Double rating = 0.0;
+
+    public String unsignalName() {
+        return Converter.convertVietnameseToUnsigned(this.name);
+    }
 }

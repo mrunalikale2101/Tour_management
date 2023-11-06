@@ -1,5 +1,5 @@
 package com.tourmanagement.Services;
-import com.tourmanagement.DTOs.CustomerDTO;
+import com.tourmanagement.DTOs.Response.CustomerDTO;
 import com.tourmanagement.Models.Customer;
 import com.tourmanagement.Repositorys.CustomerRepository;
 import org.modelmapper.ModelMapper;
@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class CustomerService {
@@ -27,6 +26,10 @@ public class CustomerService {
         return customerRepository.findAll();
     }
 
+    public Long getCountCustomers() {
+        return customerRepository.count();
+    }
+
     public Customer getCustomerById(Long id) {
         Customer customer = customerRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Customer with id [%s]".formatted(id)));
@@ -41,9 +44,9 @@ public class CustomerService {
     }
 
     public Customer updateCustomer(Long id, CustomerDTO customerDTO) {
-        getCustomerById(id);
-        Customer updatedCustomer = modelMapper.map(customerDTO, Customer.class);
-        return customerRepository.save(updatedCustomer);
+        Customer oldCustomer = getCustomerById(id);
+        modelMapper.map(customerDTO, oldCustomer);
+        return customerRepository.save(oldCustomer);
     }
 
     public void deleteCustomer(Long id) {

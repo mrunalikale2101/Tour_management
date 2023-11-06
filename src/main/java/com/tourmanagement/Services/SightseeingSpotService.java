@@ -1,7 +1,6 @@
 package com.tourmanagement.Services;
 
-import com.tourmanagement.DTOs.SightseeingSpotDTO;
-import com.tourmanagement.Models.Province;
+import com.tourmanagement.DTOs.Request.SightseeingSpotDTO;
 import com.tourmanagement.Models.SightseeingSpot;
 import com.tourmanagement.Repositorys.SightseeingSpotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,7 +21,7 @@ public class SightseeingSpotService {
 
     public SightseeingSpot getSightSeeingSpotById(Long id) {
         SightseeingSpot sightseeingSpot = sightseeingSpotRepository.findById(id)
-                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sightseeing Spot with id [%s]".formatted(id)));
+                .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Sightseeing Spot with id [%s] is not found".formatted(id)));
 
         return sightseeingSpot;
     }
