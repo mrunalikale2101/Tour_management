@@ -6,6 +6,7 @@ import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 @Component
@@ -51,9 +52,12 @@ public class EntityDtoConverter {
 
     public TourRespDTO convertToTourRespDTO(Tour tour) {
         TourRespDTO dto = modelMapper.map(tour, TourRespDTO.class);
+
         if (tour.getImages() == null) {
             dto.setImages(new ArrayList<>());
         } else {
+            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
+            dto.setDepartureDate(sdf.format(tour.getDepartureDate()));
             dto.setImages(Converter.convertJsonImagesToListImages(tour.getImages()));
         }
 

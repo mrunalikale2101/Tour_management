@@ -1,8 +1,10 @@
 package com.tourmanagement.Services;
 
 import com.tourmanagement.DTOs.Payload.TourPayload;
+import com.tourmanagement.DTOs.Request.SearchTourDTO;
 import com.tourmanagement.DTOs.Request.TourDTO;
 import com.tourmanagement.DTOs.Response.TourRespDTO;
+import com.tourmanagement.Dao.Impl.TourDaoImpl;
 import com.tourmanagement.Models.Tour;
 import com.tourmanagement.Repositorys.TourRepository;
 import com.tourmanagement.Shared.Utils.Converter;
@@ -25,13 +27,15 @@ public class TourService {
     private final ModelMapper modelMapper;
     private final EntityDtoConverter entityDtoConverter;
     private final ImageService imageService;
+    private final TourDaoImpl tourDao;
 
     @Autowired
-    public TourService(TourRepository tourRepository, ModelMapper modelMapper, EntityDtoConverter entityDtoConverter, ImageService imageService) {
+    public TourService(TourRepository tourRepository, ModelMapper modelMapper, EntityDtoConverter entityDtoConverter, ImageService imageService,TourDaoImpl tourDao) {
         this.tourRepository = tourRepository;
         this.modelMapper = modelMapper;
         this.entityDtoConverter = entityDtoConverter;
         this.imageService = imageService;
+        this.tourDao = tourDao;
     }
 
     public List<Tour> getTours(){
@@ -80,8 +84,12 @@ public class TourService {
         tourRepository.deleteById(id);
     }
 
-    public List<Tour> searchTours(String name, String sightseeing, String province, Date date) {
-            return tourRepository.searchTour(name, sightseeing, province, date);
+    public List<TourRespDTO> searchTours(SearchTourDTO searchTourDTO) {
+        var tours = tourDao.searchTours(searchTourDTO);
+
+        return tours.stream()
+                .map(entityDtoConverter::convertToTourRespDTO)
+                .collect(Collectors.toList());
     }
 
     public List<Tour> filterToursByPrice(Double minPrice, Double maxPrice) {
