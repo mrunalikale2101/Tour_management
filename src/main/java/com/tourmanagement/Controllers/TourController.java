@@ -1,16 +1,15 @@
 package com.tourmanagement.Controllers;
 
 import com.tourmanagement.DTOs.Payload.TourPayload;
+import com.tourmanagement.DTOs.Request.SearchTourDTO;
 import com.tourmanagement.DTOs.Request.TourDTO;
+import com.tourmanagement.DTOs.Response.TourRespDTO;
 import com.tourmanagement.Models.Tour;
 import com.tourmanagement.Services.TourService;
 import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Date;
 import java.util.List;
 
 @RestController
@@ -58,20 +57,9 @@ public class TourController {
     }
 
     @GetMapping("/search")
-    public List<Tour> searchTours(
-            @RequestParam(value = "name", required = false) String name,
-            @RequestParam(value = "address", required = false) String sightseeing,
-            @RequestParam(value = "province", required = false) String province,
-            @RequestParam(value = "date", required = false) String dateString) {
-        Date date = null;
-        if (dateString != null) {
-            try {
-                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-                date = dateFormat.parse(dateString);
-            } catch (ParseException e) {
-            }
-        }
-        List<Tour> tours = tourService.searchTours(name, sightseeing, province, date);
+    public List<TourRespDTO> searchTours(
+            @ModelAttribute SearchTourDTO searchTourDTO) {
+        List<TourRespDTO> tours = tourService.searchTours(searchTourDTO);
         return tours;
     }
 

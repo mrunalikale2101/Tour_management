@@ -1,11 +1,11 @@
 package com.tourmanagement.Models;
 
 import com.tourmanagement.Shared.Types.EnumTransportModeTour;
+import com.tourmanagement.Shared.Utils.Converter;
 import jakarta.persistence.*;
 import lombok.Data;
 
 import java.util.Date;
-import java.util.List;
 
 
 @Entity
@@ -60,4 +60,7 @@ public class Tour {
     @Column(columnDefinition = "DOUBLE PRECISION DEFAULT 0.0")
     private Double rating = 0.0;
 
+    public String unsignalName() {
+        return Converter.convertVietnameseToUnsigned(this.name);
+    }
 }

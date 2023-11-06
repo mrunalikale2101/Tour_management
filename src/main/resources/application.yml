@@ -14,16 +14,10 @@ spring:
   jpa:
     hibernate:
       ddl-auto: update
+    open-in-view: false
   main:
     web-application-type: servlet
     banner-mode: off
-  security:
-    user:
-      alwaysGenerateLoginUsername: false
-
-logging:
-  level:
-    root: warn
 
 jwt:
   access:
