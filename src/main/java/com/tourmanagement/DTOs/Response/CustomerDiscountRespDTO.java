@@ -20,5 +20,6 @@ public class CustomerDiscountRespDTO {
     private Long discountId;
     private Customer customer;
     private Long tourId;
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date usageDate;
 }

@@ -1,6 +1,7 @@
 package com.tourmanagement.DTOs.Response;
 
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tourmanagement.Models.Customer;
 import com.tourmanagement.Shared.Types.EnumStatusBookedTour;
 import lombok.AllArgsConstructor;
@@ -21,6 +22,7 @@ public class BookTourRespDTO {
 
     private Long tourId;
 
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date bookingDate;
 
     private EnumStatusBookedTour status;
