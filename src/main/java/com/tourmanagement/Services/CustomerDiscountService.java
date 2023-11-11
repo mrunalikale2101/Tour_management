@@ -72,7 +72,7 @@ public class CustomerDiscountService {
 
     public List<CustomerDiscountRespDTO> getAllCustomerDiscountByCustomer(Long customerId){
         customerService.getCustomerById(customerId);
-        List<CustomerDiscount> discounts = customerDiscountRepository.findCustomerDiscountByCustomer(customerId);
+        List<CustomerDiscount> discounts = customerDiscountRepository.findAllCustomerDiscountByCustomer(customerId);
         return discounts.stream()
                 .map(entityDtoConverter::convertToCustomerDiscountRespDTO)
                 .collect(Collectors.toList());
