@@ -65,6 +65,14 @@ public class BookTourService {
                 .collect(Collectors.toList());
     }
 
+    public List<BookTourRespDTO> getAllBookedTourByCustomer(Long customerId){
+        customerService.getCustomerById(customerId);
+        List<BookedTour> bookedTours = bookTourRepository.findBookedTourByCustomer(customerId);
+        return bookedTours.stream()
+                .map(entityDtoConverter::convertToBookTourRespDTO)
+                .collect(Collectors.toList());
+    }
+
     public BookTourRespDTO createBookedTour(BookTourDTO BookedTourDTO) {
         Tour tour = tourService.getTourById(BookedTourDTO.getTourId());
         Customer customer = customerService.getCustomerById(BookedTourDTO.getCustomerId());

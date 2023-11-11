@@ -14,4 +14,6 @@ public interface CustomerDiscountRepository extends JpaRepository<CustomerDiscou
     @Query("SELECT d FROM CustomerDiscount d WHERE d.tour.id = :tourId")
     List<CustomerDiscount> findAllCustomerDiscountByTour(Long tourId);
 
+    @Query("SELECT cd FROM CustomerDiscount cd WHERE cd.customer.id = :customerId")
+    List<CustomerDiscount> findCustomerDiscountByCustomer(Long customerId);
 }

@@ -44,6 +44,12 @@ public class BookedTourController
         return booktours;
     }
 
+    @GetMapping("/customer/{customerId}")
+    public List<BookTourRespDTO> getAllBookTourByCustomer(@PathVariable Long customerId) {
+        List<BookTourRespDTO> booktours = bookTourService.getAllBookedTourByCustomer(customerId);
+        return booktours;
+    }
+
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public BookTourRespDTO createBookTour(@RequestBody BookTourDTO bookTourDTO) {

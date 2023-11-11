@@ -45,7 +45,7 @@ public class EntityDtoConverter {
     public BookTourRespDTO convertToBookTourRespDTO(BookedTour bookedTour) {
         BookTourRespDTO dto = modelMapper.map(bookedTour, BookTourRespDTO.class);
         dto.setCustomer(bookedTour.getCustomer());
-        dto.setTourId(bookedTour.getId());
+        dto.setTourId(bookedTour.getTour().getId());
 
         return dto;
     }

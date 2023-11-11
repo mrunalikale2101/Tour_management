@@ -10,4 +10,7 @@ public interface BookTourRepository extends JpaRepository<BookedTour, Long> {
 
     @Query("SELECT d FROM BookedTour d WHERE d.tour.id = :tourId")
     List<BookedTour> findBookedTourByTour(Long tourId);
+
+    @Query("SELECT d FROM BookedTour d WHERE d.customer.id = :customerId")
+    List<BookedTour> findBookedTourByCustomer(Long customerId);
 }
