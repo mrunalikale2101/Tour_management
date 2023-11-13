@@ -1,7 +1,7 @@
 package com.tourmanagement.Models;
 
+import com.tourmanagement.Shared.Types.EnumStatusTour;
 import com.tourmanagement.Shared.Types.EnumTransportModeTour;
-import com.tourmanagement.Shared.Utils.Converter;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -27,6 +27,9 @@ public class Tour {
 
     @Column(columnDefinition = "TEXT")
     private String departureLocation;
+
+    @Column(name = "registered_seats", nullable = false)
+    private Integer registeredSeats = 0;
 
     @Column(name = "available_seats", nullable = false)
     private Integer availableSeats;
@@ -60,7 +63,6 @@ public class Tour {
     @Column(columnDefinition = "DOUBLE PRECISION DEFAULT 0.0")
     private Double rating = 0.0;
 
-    public String unsignalName() {
-        return Converter.convertVietnameseToUnsigned(this.name);
-    }
+    @Enumerated(EnumType.STRING)
+    private EnumStatusTour status;
 }

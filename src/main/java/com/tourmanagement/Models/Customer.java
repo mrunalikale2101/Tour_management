@@ -1,9 +1,12 @@
 package com.tourmanagement.Models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import lombok.*;
 
 import java.util.Date;
+import java.util.List;
 
 
 @Entity
@@ -39,6 +42,7 @@ public class Customer {
             nullable = false,
             name = "date_of_birth"
     )
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date dateOfBirth;
 
     @Column(
@@ -46,4 +50,16 @@ public class Customer {
             columnDefinition="TEXT"
     )
     private String avatar;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<CustomerDiscount> customerDiscounts;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<Review> reviews;
+
+    @OneToMany(mappedBy = "customer", cascade = CascadeType.ALL)
+    @JsonIgnore
+    private List<BookedTour> bookedTours;
 }

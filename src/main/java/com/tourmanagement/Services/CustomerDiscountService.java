@@ -70,6 +70,14 @@ public class CustomerDiscountService {
                 .collect(Collectors.toList());
     }
 
+    public List<CustomerDiscountRespDTO> getAllCustomerDiscountByCustomer(Long customerId){
+        customerService.getCustomerById(customerId);
+        List<CustomerDiscount> discounts = customerDiscountRepository.findAllCustomerDiscountByCustomer(customerId);
+        return discounts.stream()
+                .map(entityDtoConverter::convertToCustomerDiscountRespDTO)
+                .collect(Collectors.toList());
+    }
+
     public CustomerDiscountRespDTO createCustomerDiscount(CustomerDiscountDTO customerDiscountDTO) {
         Tour tour = tourService.getTourById(customerDiscountDTO.getTourId());
         Customer customer = customerService.getCustomerById(customerDiscountDTO.getCustomerId());

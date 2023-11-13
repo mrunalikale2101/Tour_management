@@ -44,6 +44,12 @@ public class CustomerDiscountController {
         return discounts;
     }
 
+    @GetMapping("/customer/{customerId}")
+    public List<CustomerDiscountRespDTO> getAllCustomerDiscountByCustomer(@PathVariable Long customerId) {
+        List<CustomerDiscountRespDTO> discounts = customerDiscountService.getAllCustomerDiscountByCustomer(customerId);
+        return discounts;
+    }
+
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
     public CustomerDiscountRespDTO createCustomerDiscount(@RequestBody CustomerDiscountDTO customerDiscountRespDTO) {
