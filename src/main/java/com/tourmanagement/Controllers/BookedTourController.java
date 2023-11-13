@@ -1,11 +1,12 @@
 package com.tourmanagement.Controllers;
 
 
-import com.tourmanagement.DTOs.Payload.PaginationRequest;
+import com.tourmanagement.DTOs.Payload.FilterBookedTour;
 import com.tourmanagement.DTOs.Request.BookedTourDTO;
 import com.tourmanagement.DTOs.Response.BookedTourRespDTO;
 import com.tourmanagement.DTOs.Response.PaginationRespDTO;
 import com.tourmanagement.Services.BookedTourService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -27,8 +28,8 @@ public class BookedTourController
 
 
     @GetMapping
-    public PaginationRespDTO<BookedTourRespDTO> getAllBookTour(@ModelAttribute PaginationRequest paginationRequest) {
-        return bookedTourService.getAllBookedTour(paginationRequest);
+    public PaginationRespDTO<BookedTourRespDTO> getAllBookTour(@Valid @ModelAttribute FilterBookedTour filterBookedTour) {
+        return bookedTourService.getAllBookedTour(filterBookedTour);
     }
 
     @GetMapping("/{id}")

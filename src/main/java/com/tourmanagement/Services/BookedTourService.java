@@ -1,21 +1,18 @@
 package com.tourmanagement.Services;
 
 
-import com.tourmanagement.DTOs.Payload.PaginationRequest;
+import com.tourmanagement.DTOs.Payload.FilterBookedTour;
 import com.tourmanagement.DTOs.Request.BookedTourDTO;
 import com.tourmanagement.DTOs.Request.TourDTO;
 import com.tourmanagement.DTOs.Response.BookedTourRespDTO;
 import com.tourmanagement.DTOs.Response.PaginationRespDTO;
+import com.tourmanagement.Dao.BookedTourDao;
 import com.tourmanagement.Models.BookedTour;
 import com.tourmanagement.Models.Customer;
 import com.tourmanagement.Models.Tour;
 import com.tourmanagement.Repositorys.BookedTourRepository;
 import com.tourmanagement.Shared.Utils.EntityDtoConverter;
 import org.modelmapper.ModelMapper;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
@@ -31,26 +28,32 @@ public class BookedTourService {
     private final TourService tourService;
     private final CustomerService customerService;
     private final EntityDtoConverter entityDtoConverter;
+    private final BookedTourDao bookedTourDao;
 
-    public BookedTourService(BookedTourRepository bookedTourRepository, ModelMapper modelMapper, TourService tourService, CustomerService customerService, EntityDtoConverter entityDtoConverter) {
+    public BookedTourService(BookedTourRepository bookedTourRepository,
+                             ModelMapper modelMapper,
+                             TourService tourService,
+                             CustomerService customerService,
+                             EntityDtoConverter entityDtoConverter,
+                             BookedTourDao bookedTourDao) {
         this.bookedTourRepository = bookedTourRepository;
         this.modelMapper = modelMapper;
         this.tourService = tourService;
         this.customerService = customerService;
         this.entityDtoConverter = entityDtoConverter;
+        this.bookedTourDao = bookedTourDao;
     }
 
-    public PaginationRespDTO<BookedTourRespDTO> getAllBookedTour(PaginationRequest pagination) {
+    public PaginationRespDTO<BookedTourRespDTO> getAllBookedTour(FilterBookedTour filterBookedTour) {
         PaginationRespDTO<BookedTourRespDTO> result = new PaginationRespDTO<BookedTourRespDTO>();
-        result.setTotal(bookedTourRepository.count());
-        result.setPage(pagination.getPage());
-        result.setItemsPerPage(pagination.getItemsPerPage());
-        Sort sort = Sort.by(Sort.Direction.ASC, "bookingDate");
-        Pageable pageable = PageRequest.of(pagination.getPage(), pagination.getItemsPerPage(), sort);
+        result.setTotal(bookedTourDao.filterCount(filterBookedTour));
+        result.setPage(filterBookedTour.getPage());
+        result.setItemsPerPage(filterBookedTour.getItemsPerPage());
 
-        Page<BookedTour> bookedTourPage = bookedTourRepository.findAll(pageable);
+        List<BookedTour> bookedTours = bookedTourDao.filter(filterBookedTour);
+
         result.setData(
-                bookedTourPage.getContent().stream()
+                bookedTours.stream()
                         .map(entityDtoConverter::convertToBookTourRespDTO)
                         .collect(Collectors.toList()));
 

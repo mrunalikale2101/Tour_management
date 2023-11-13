@@ -1,16 +1,25 @@
 package com.tourmanagement.Shared.Types;
 
 public enum EnumStatusBookedTour {
-    PENDING(false),
-    CONFIRMED(true);
+    PENDING("pending"),
+    CONFIRMED("confirmed");
 
-    private final boolean value;
+    private final String value;
 
-    EnumStatusBookedTour(boolean value) {
+    EnumStatusBookedTour(String value) {
         this.value = value;
     }
 
-    public boolean getValue() {
+    public String getValue() {
         return value;
+    }
+
+    public static EnumStatusBookedTour fromString(String status) {
+        for (EnumStatusBookedTour enumStatus : EnumStatusBookedTour.values()) {
+            if (enumStatus.value.equalsIgnoreCase(status.toLowerCase())) {
+                return enumStatus;
+            }
+        }
+        throw new IllegalArgumentException("No constant with the specified status found");
     }
 }

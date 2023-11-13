@@ -5,17 +5,12 @@ import com.tourmanagement.DTOs.Request.SearchTourDTO;
 import com.tourmanagement.Dao.TourDao;
 import com.tourmanagement.Models.QTour;
 import com.tourmanagement.Models.Tour;
-import jakarta.persistence.EntityManager;
-import jakarta.persistence.PersistenceContext;
 import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 @Repository
-public class TourDaoImpl implements TourDao {
-    @PersistenceContext
-    private EntityManager _entityManager;
-
+public class TourDaoImpl extends BasicDao implements TourDao {
     @Override
     public List<Tour> searchTours(SearchTourDTO searchTourDTO) {
         JPAQuery<Tour> query = new JPAQuery<>(_entityManager);
