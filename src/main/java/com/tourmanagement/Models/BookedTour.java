@@ -9,7 +9,7 @@ import java.util.Date;
 
 @Entity
 @Data
-@Table(name="booked_tours")
+@Table(name = "booked_tours")
 public class BookedTour {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,18 +19,17 @@ public class BookedTour {
     @JoinColumn(name = "customer_id")
     private Customer customer;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tour_id")
     private Tour tour;
 
     @Column(
-            nullable = true,
             name = "booking_date"
     )
-    private Date bookingDate;
+    private Date bookingDate = new Date();
 
     @Enumerated(EnumType.STRING)
-    private EnumStatusBookedTour status;
+    private EnumStatusBookedTour status = EnumStatusBookedTour.PENDING;
 
     @Column(nullable = true)
     private String note;
