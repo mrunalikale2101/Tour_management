@@ -1,9 +1,11 @@
 package com.tourmanagement.Controllers;
 
 
-import com.tourmanagement.DTOs.Request.BookTourDTO;
-import com.tourmanagement.DTOs.Response.BookTourRespDTO;
-import com.tourmanagement.Services.BookTourService;
+import com.tourmanagement.DTOs.Payload.PaginationRequest;
+import com.tourmanagement.DTOs.Request.BookedTourDTO;
+import com.tourmanagement.DTOs.Response.BookedTourRespDTO;
+import com.tourmanagement.DTOs.Response.PaginationRespDTO;
+import com.tourmanagement.Services.BookedTourService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -15,59 +17,49 @@ import java.util.List;
 @ResponseStatus(HttpStatus.OK)
 public class BookedTourController 
 {
-    private final BookTourService bookTourService;
+    private final BookedTourService bookedTourService;
 
     
     @Autowired
-    public BookedTourController(BookTourService bookTourService) {
-        this.bookTourService = bookTourService;
+    public BookedTourController(BookedTourService bookedTourService) {
+        this.bookedTourService = bookedTourService;
     }
 
 
     @GetMapping
-    public List<BookTourRespDTO> getAllBookTour() {
-        List<BookTourRespDTO> booktours = bookTourService.getAllBookedTour();
-
-        return booktours;
+    public PaginationRespDTO<BookedTourRespDTO> getAllBookTour(@ModelAttribute PaginationRequest paginationRequest) {
+        return bookedTourService.getAllBookedTour(paginationRequest);
     }
 
     @GetMapping("/{id}")
-    public BookTourRespDTO getBookTourById(@PathVariable Long id) {
-        BookTourRespDTO bookTourRespDTO = bookTourService.getBookedTourResponseById(id);
-
-        return bookTourRespDTO;
+    public BookedTourRespDTO getBookTourById(@PathVariable Long id) {
+        return bookedTourService.getBookedTourResponseById(id);
     }
 
     @GetMapping("/tour/{tourId}")
-    public List<BookTourRespDTO> getAllBookTourByTour(@PathVariable Long tourId) {
-        List<BookTourRespDTO> booktours = bookTourService.getAllBookedTourByTour(tourId);
-        return booktours;
+    public List<BookedTourRespDTO> getBookedToursOfTour(@PathVariable Long tourId) {
+        return bookedTourService.getAllBookedTourByTour(tourId);
     }
 
     @GetMapping("/customer/{customerId}")
-    public List<BookTourRespDTO> getAllBookTourByCustomer(@PathVariable Long customerId) {
-        List<BookTourRespDTO> booktours = bookTourService.getAllBookedTourByCustomer(customerId);
-        return booktours;
+    public List<BookedTourRespDTO> getAllBookTourByCustomer(@PathVariable Long customerId) {
+        return bookedTourService.getAllBookedTourByCustomer(customerId);
     }
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public BookTourRespDTO createBookTour(@RequestBody BookTourDTO bookTourDTO) {
-        BookTourRespDTO newBookTour = bookTourService.createBookedTour(bookTourDTO);
-
-        return newBookTour;
+    public BookedTourRespDTO createBookTour(@RequestBody BookedTourDTO bookedTourDTO) {
+        return  bookedTourService.createBookedTour(bookedTourDTO);
     }
 
     @PutMapping("/{id}")
-    public BookTourRespDTO updateBookTour(@PathVariable Long id, @RequestBody BookTourDTO bookTourDTO) {
-        BookTourRespDTO updateBookedTour = bookTourService.updateBookedTour(id, bookTourDTO);
-
-        return updateBookedTour;
+    public BookedTourRespDTO updateBookTour(@PathVariable Long id, @RequestBody BookedTourDTO bookedTourDTO) {
+        return bookedTourService.updateBookedTour(id, bookedTourDTO);
     }
 
     @DeleteMapping("/{id}")
     public String deleteBookedTour(@PathVariable Long id) {
-        bookTourService.deleteBookedTour(id);
+        bookedTourService.deleteBookedTour(id);
 
         return "BookedTour with [%S] deleted successfully!".formatted(id);
     }

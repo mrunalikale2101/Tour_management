@@ -1,17 +1,16 @@
 package com.tourmanagement.Shared.Types;
 
 public enum EnumStatusBookedTour {
-    NOSTART("Chưa diễn ra"),
-    STARTED("Đang diễn ra"),
-    FINISHED("Đã kết thúc");
+    PENDING(false),
+    CONFIRMED(true);
 
-    private final String status;
+    private final boolean value;
 
-    EnumStatusBookedTour(String status) {
-        this.status = status;
+    EnumStatusBookedTour(boolean value) {
+        this.value = value;
     }
 
-    public String getStatus() {
-        return status;
+    public boolean getValue() {
+        return value;
     }
 }
