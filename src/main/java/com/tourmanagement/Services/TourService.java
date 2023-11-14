@@ -70,13 +70,8 @@ public class TourService {
         return tourRepository.save(newTour);
     }
 
-    public Tour updateTour(Long id, TourDTO tourDTO) {
-        getTourById(id);
-
-        Tour tourUpdate = modelMapper.map(tourDTO, Tour.class);
-        tourUpdate.setId(id);
-
-        return tourRepository.save(tourUpdate);
+    public Tour updateTour(Tour tour) {
+        return tourRepository.save(tour);
     }
 
     public void deleteTour(Long id) {
