@@ -1,12 +1,16 @@
 package com.tourmanagement.Controllers;
 
+import com.tourmanagement.DTOs.Payload.PaginationRequest;
 import com.tourmanagement.DTOs.Payload.TourPayload;
 import com.tourmanagement.DTOs.Request.SearchTourDTO;
 import com.tourmanagement.DTOs.Request.TourDTO;
+import com.tourmanagement.DTOs.Response.BookedTourRespDTO;
+import com.tourmanagement.DTOs.Response.PaginationRespDTO;
 import com.tourmanagement.DTOs.Response.TourRespDTO;
 import com.tourmanagement.Models.Tour;
 import com.tourmanagement.Services.TourService;
 import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
@@ -23,10 +27,14 @@ public class TourController {
     }
 
     @GetMapping("/getAll")
-    public List<Tour> handleGetTours() {
-        List<Tour> tours = tourService.getTours();
-
+    public List<TourRespDTO> handleGetTours() {
+        List<TourRespDTO> tours = tourService.getTours();
         return tours;
+    }
+
+    @GetMapping
+    public PaginationRespDTO<TourRespDTO> getAllBookTour(@ModelAttribute PaginationRequest paginationRequest) {
+        return tourService.getAllTour(paginationRequest);
     }
 
     @GetMapping("/{id}")
@@ -42,9 +50,9 @@ public class TourController {
         return createdTour;
     }
 
-    @PutMapping("/{id}")
-    public Tour handleUpdateExistedTour(@PathVariable Long id, @RequestBody @Valid TourDTO tourDTO) {
-        Tour updatedTour = tourService.updateTour(id, tourDTO);
+    @RequestMapping(value = "/{id}" , method = RequestMethod.PUT, consumes = { "multipart/form-data" })
+    public Tour handleUpdateExistedTour(@PathVariable Long id, @ModelAttribute @Valid TourPayload payload) {
+        Tour updatedTour = tourService.updateTour(id, payload);
 
         return updatedTour;
     }
@@ -75,5 +83,12 @@ public class TourController {
     public List<Tour> getTopRatedTours() {
         List<Tour> topRatedTours = tourService.getTopRatedTours(5);
         return topRatedTours;
+    }
+
+    @GetMapping("/getTour")
+    public List<TourRespDTO> getToursByPage(
+            @RequestParam(defaultValue = "1") int page,
+            @RequestParam(defaultValue = "6") int size) {
+        return tourService.getTourRespDTOsByPage(page - 1, size);
     }
 }

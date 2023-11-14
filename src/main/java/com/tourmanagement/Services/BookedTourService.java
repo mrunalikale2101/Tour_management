@@ -103,7 +103,7 @@ public class BookedTourService {
         bookedTour.setCustomer(customer);
 
         tour.setRegisteredSeats(tour.getRegisteredSeats() + 1);
-        tourService.updateTour(tour.getId(), modelMapper.map(tour, TourDTO.class));
+        //tourService.updateTour(tour.getId(), modelMapper.map(tour, TourDTO.class));
 
         return entityDtoConverter.convertToBookTourRespDTO(bookedTourRepository.save(bookedTour));
     }
