@@ -2,7 +2,6 @@ package com.tourmanagement.Controllers;
 
 import com.tourmanagement.DTOs.Payload.TourPayload;
 import com.tourmanagement.DTOs.Request.SearchTourDTO;
-import com.tourmanagement.DTOs.Request.TourDTO;
 import com.tourmanagement.DTOs.Response.TourRespDTO;
 import com.tourmanagement.Models.Tour;
 import com.tourmanagement.Services.TourService;
@@ -40,13 +39,6 @@ public class TourController {
     public Tour handleCreateNewTour(@ModelAttribute @Valid TourPayload payload) {
         Tour createdTour = tourService.createTour(payload);
         return createdTour;
-    }
-
-    @PutMapping("/{id}")
-    public Tour handleUpdateExistedTour(@PathVariable Long id, @RequestBody @Valid TourDTO tourDTO) {
-        Tour updatedTour = tourService.updateTour(id, tourDTO);
-
-        return updatedTour;
     }
 
     @DeleteMapping("/{id}")

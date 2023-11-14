@@ -2,7 +2,8 @@ package com.tourmanagement.Shared.Types;
 
 public enum EnumStatusBookedTour {
     PENDING("pending"),
-    CONFIRMED("confirmed");
+    CONFIRMED("confirmed"),
+    REJECTED("rejected");
 
     private final String value;
 
