@@ -30,15 +30,14 @@ public class ImageService {
 
             File fileToDelete = new File(fullPath);
 
-            if (fileToDelete.exists()) {
-                if (fileToDelete.delete()) {
-                    System.out.println("File deleted successfully: " + fullPath);
-                } else {
-                    throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to delete file");
-                }
-            } else {
+            if(!fileToDelete.exists()){
                 throw new ResponseStatusException(HttpStatus.NOT_FOUND, "File not found");
             }
+
+            if(!fileToDelete.delete()){
+                throw new ResponseStatusException(HttpStatus.INTERNAL_SERVER_ERROR, "Failed to delete file");
+            }
+
         } catch (Exception e) {
             e.printStackTrace();
             throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Failed to delete file");
