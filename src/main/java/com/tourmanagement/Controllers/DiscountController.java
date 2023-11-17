@@ -1,8 +1,11 @@
 package com.tourmanagement.Controllers;
 
+import com.tourmanagement.DTOs.Payload.FilterDiscount;
 import com.tourmanagement.DTOs.Request.DiscountDTO;
 import com.tourmanagement.DTOs.Response.DiscountRespDTO;
+import com.tourmanagement.DTOs.Response.PaginationRespDTO;
 import com.tourmanagement.Services.DiscountService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
@@ -30,6 +33,13 @@ public class DiscountController {
         return discounts;
     }
 
+    @GetMapping("/pagination")
+    public PaginationRespDTO<DiscountRespDTO> getAllDiscountPagination(@ModelAttribute @Valid  FilterDiscount filterDiscount) {
+        PaginationRespDTO<DiscountRespDTO> discounts = discountService.getAllDiscountPagination(filterDiscount);
+
+        return discounts;
+    }
+
     @GetMapping("/{id}")
     public DiscountRespDTO getDiscountById(@PathVariable Long id) {
         DiscountRespDTO discount = discountService.getDiscountResponseById(id);
@@ -45,7 +55,7 @@ public class DiscountController {
 
     @PostMapping()
     @ResponseStatus(HttpStatus.CREATED)
-    public DiscountRespDTO createDiscount(@RequestBody DiscountDTO discountDTO) {
+    public DiscountRespDTO createDiscount(@RequestBody @Valid DiscountDTO discountDTO) {
         DiscountRespDTO newDiscount = discountService.createDiscount(discountDTO);
 
         return newDiscount;
