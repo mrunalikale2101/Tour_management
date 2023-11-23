@@ -1,10 +1,13 @@
 package com.tourmanagement.Controllers;
 
+import com.tourmanagement.DTOs.Request.CustomerReqDTO;
 import com.tourmanagement.DTOs.Response.CustomerDTO;
 import com.tourmanagement.Models.Customer;
 import com.tourmanagement.Services.CustomerService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -35,16 +38,16 @@ public class CustomerController {
        return customer;
     }
 
-    @PostMapping()
+    @PostMapping( consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
     @ResponseStatus(HttpStatus.CREATED)
-    public Customer createCustomer(@RequestBody CustomerDTO customerDTO) {
+    public Customer createCustomer(@ModelAttribute @Valid CustomerReqDTO customerDTO) {
         Customer newCustomer = customerService.createCustomer(customerDTO);
 
         return newCustomer;
     }
 
-    @PutMapping("/{id}")
-    public Customer updateCustomer(@PathVariable Long id, @RequestBody CustomerDTO customerDTO) {
+    @PutMapping(value = "/{id}", consumes = MediaType.MULTIPART_FORM_DATA_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public Customer updateCustomer(@PathVariable Long id, @ModelAttribute @Valid CustomerReqDTO customerDTO) {
         Customer updatedCustomer = customerService.updateCustomer(id, customerDTO);
 
         return updatedCustomer;
