@@ -9,6 +9,7 @@ import lombok.Data;
 import org.springframework.web.multipart.MultipartFile;
 
 
+import java.math.BigInteger;
 import java.util.Date;
 import java.util.List;
 
@@ -34,5 +35,12 @@ public class TourDTO {
     private Date departureDate;
 
     private String images;
+
+    private String departureLocation;
+
+    @NotNull(message = "Guide cannot be null")
+    private Long guide_id;
+
+    private String idSightSeeing;
 
 }

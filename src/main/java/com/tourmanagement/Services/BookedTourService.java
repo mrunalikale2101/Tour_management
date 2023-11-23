@@ -115,7 +115,7 @@ public class BookedTourService {
                     mailService.sendMailResponseUser(bookedTour.getCustomer().getEmail(), subject, htmlContent);
                     Tour tour = bookedTour.getTour();
                     tour.setRegisteredSeats(tour.getRegisteredSeats() - 1);
-                    tourService.updateTour(tour);
+                    //tourService.updateTour(tour);
                 }
                 default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot handle!");
             }
@@ -161,7 +161,7 @@ public class BookedTourService {
         bookedTour.setCustomer(customer);
 
         tour.setRegisteredSeats(tour.getRegisteredSeats() + 1);
-        tourService.updateTour(tour);
+        //tourService.updateTour(tour);
 
         return entityDtoConverter.convertToBookTourRespDTO(bookedTourRepository.save(bookedTour));
     }

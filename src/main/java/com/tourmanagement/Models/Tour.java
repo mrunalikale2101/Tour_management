@@ -1,5 +1,6 @@
 package com.tourmanagement.Models;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tourmanagement.Shared.Types.EnumStatusTour;
 import com.tourmanagement.Shared.Types.EnumTransportModeTour;
 import jakarta.persistence.*;
@@ -20,6 +21,7 @@ public class Tour {
     private String name;
 
     @Column(nullable = false, name = "departure_date")
+    @JsonFormat(pattern = "dd/MM/yyyy")
     private Date departureDate;
 
     @Column(nullable = false)
@@ -34,11 +36,10 @@ public class Tour {
     @Column(name = "available_seats", nullable = false)
     private Integer availableSeats;
 
-    @ManyToOne(fetch = FetchType.EAGER)
-    @JoinColumn(name = "destination_id")
-    private SightseeingSpot sightseeingSpot;
+    @Column(columnDefinition = "json")
+    private String idSightSeeing;
 
-    @ManyToOne(fetch = FetchType.EAGER, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "guide_id")
     private TourGuide guide;
 

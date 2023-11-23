@@ -2,21 +2,30 @@ package com.tourmanagement.Shared.Utils;
 
 import com.tourmanagement.DTOs.Response.*;
 import com.tourmanagement.Models.*;
+import com.tourmanagement.Services.SightseeingSpotService;
+import com.tourmanagement.Services.TourGuideService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.List;
 
 @Component
 public class EntityDtoConverter {
 
     private final ModelMapper modelMapper;
+    private final TourGuideService tourGuideService;
+
+    private final SightseeingSpotService sightseeingSpotService;
 
     @Autowired
-    public EntityDtoConverter(ModelMapper modelMapper) {
+    public EntityDtoConverter(ModelMapper modelMapper, TourGuideService tourGuideService, SightseeingSpotService sightseeingSpotService)
+    {
         this.modelMapper = modelMapper;
+        this.tourGuideService = tourGuideService;
+        this.sightseeingSpotService = sightseeingSpotService;
     }
 
     // Helper method to convert Review entity to ReviewResponseDTO
@@ -53,14 +62,35 @@ public class EntityDtoConverter {
     public TourRespDTO convertToTourRespDTO(Tour tour) {
         TourRespDTO dto = modelMapper.map(tour, TourRespDTO.class);
 
+        System.out.println(tour.getIdSightSeeing());
+
+        List<SightseeingSpot> sightseeingSpots = new ArrayList<>();
+
+        if (tour.getIdSightSeeing() == null){
+            dto.setSightseeingSpots(new ArrayList<>());
+        } else {
+            List<String> string_id = Converter.convertJsonIDToListSightSeeing(tour.getIdSightSeeing());
+            for (String id: string_id){
+                System.out.println(id);
+                SightseeingSpot sightseeingSpot = sightseeingSpotService.getSightSeeingSpotById(Long.parseLong(id));
+                sightseeingSpots.add(sightseeingSpot);
+            }
+            dto.setSightseeingSpots(sightseeingSpots);
+        }
         if (tour.getImages() == null) {
             dto.setImages(new ArrayList<>());
         } else {
-            SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy");
-            dto.setDepartureDate(sdf.format(tour.getDepartureDate()));
             dto.setImages(Converter.convertJsonImagesToListImages(tour.getImages()));
         }
 
+        if (tour.getGuide() != null) {
+            TourGuide guide = tourGuideService.getTourGuideById(tour.getGuide().getId());
+
+            if (guide != null) {
+                TourGuide guideDTO = modelMapper.map(guide, TourGuide.class);
+                dto.setGuide(guideDTO);
+            }
+        }
         return dto;
     }
 }
