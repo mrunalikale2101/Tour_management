@@ -29,6 +29,12 @@ public class ProvinceController {
         return provinces;
     }
 
+    @PostMapping()
+    public List<Province> handleAddNewProvince(@RequestBody @Valid List<Province> province) {
+        List<Province> newProvince = provinceService.createProvince(province);
+        return newProvince;
+    }
+
     @GetMapping("/{id}/sightseeing-spots")
     public List<SightseeingSpot> handleGetSightseeingSpotByProvinceId(@PathVariable Long id) {
         List<SightseeingSpot> sightseeingSpots = provinceService.getSightSeeingSpotOfProvince(id);

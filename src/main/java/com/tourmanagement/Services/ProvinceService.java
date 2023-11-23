@@ -9,6 +9,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -26,6 +27,19 @@ public class ProvinceService {
         List<Province> provinces = provinceRepository.findAll();
 
         return provinces;
+    }
+
+    public List<Province> createProvince(List<Province> provinces) {
+        List<Province> newProvinces = new ArrayList<>();
+        for (Province province : provinces){
+            Province newProvince = new Province();
+            newProvince.setId(province.getId());
+            newProvince.setName(province.getName());
+            newProvince.setCodename(province.getCodename());
+            newProvinces.add(newProvince);
+        }
+
+        return provinceRepository.saveAll(newProvinces);
     }
 
     public Province getProvinceById(Long id) {

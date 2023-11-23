@@ -7,6 +7,8 @@ import jakarta.validation.Valid;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @RequestMapping("/tour-guides")
 @ResponseStatus(HttpStatus.OK)
@@ -20,6 +22,13 @@ public class TourGuideController {
     @GetMapping("/{id}")
     public TourGuide handleGetSpecificTourGuide(@PathVariable Long id) {
         TourGuide tourGuide = tourGuideService.getTourGuideById(id);
+
+        return tourGuide;
+    }
+
+    @GetMapping("")
+    public List<TourGuide> handleGetAllTourGuide() {
+        List<TourGuide> tourGuide = tourGuideService.getTourGuides();
 
         return tourGuide;
     }
