@@ -30,6 +30,9 @@ public class Tour {
     @Column(columnDefinition = "TEXT")
     private String departureLocation;
 
+    @Column(columnDefinition = "TEXT")
+    private String destinationLocation;
+
     @Column(name = "registered_seats", nullable = false)
     private Integer registeredSeats = 0;
 

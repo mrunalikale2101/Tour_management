@@ -1,6 +1,9 @@
 package com.tourmanagement.Controllers;
 
+import com.tourmanagement.DTOs.Payload.PaginationRequest;
 import com.tourmanagement.DTOs.Request.SightseeingSpotDTO;
+import com.tourmanagement.DTOs.Response.PaginationRespDTO;
+import com.tourmanagement.DTOs.Response.SightseeingSpotRespDTO;
 import com.tourmanagement.Models.Province;
 import com.tourmanagement.Models.SightseeingSpot;
 import com.tourmanagement.Services.ProvinceService;
@@ -40,6 +43,12 @@ public class ProvinceController {
         List<SightseeingSpot> sightseeingSpots = provinceService.getSightSeeingSpotOfProvince(id);
 
         return sightseeingSpots;
+    }
+
+    @GetMapping("/{id}/sightseeing-spots-page")
+    public PaginationRespDTO<SightseeingSpotRespDTO> handleGetSightseeingSpotByProvinceIdPage(@PathVariable Long id, @ModelAttribute PaginationRequest paginationRequest) {
+        return provinceService.getSightSeeingSpotOfProvincePage(id, paginationRequest);
+
     }
 
     @PostMapping("/{id}/sightseeing-spots")

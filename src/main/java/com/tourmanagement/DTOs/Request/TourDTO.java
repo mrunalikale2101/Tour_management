@@ -38,6 +38,8 @@ public class TourDTO {
 
     private String departureLocation;
 
+    private String destinationLocation;
+
     @NotNull(message = "Guide cannot be null")
     private Long guide_id;
 

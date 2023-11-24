@@ -1,16 +1,24 @@
 package com.tourmanagement.Services;
 
+import com.tourmanagement.DTOs.Payload.PaginationRequest;
 import com.tourmanagement.DTOs.Request.SightseeingSpotDTO;
+import com.tourmanagement.DTOs.Response.PaginationRespDTO;
+import com.tourmanagement.DTOs.Response.SightseeingSpotRespDTO;
 import com.tourmanagement.Models.Province;
 import com.tourmanagement.Models.SightseeingSpot;
 import com.tourmanagement.Repositorys.ProvinceRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ProvinceService {
@@ -55,6 +63,30 @@ public class ProvinceService {
         List<SightseeingSpot> sightseeingSpots = sightseeingSpotService.getSightseeingSpotsByProvinceId(id);
 
         return sightseeingSpots;
+    }
+
+    public PaginationRespDTO<SightseeingSpotRespDTO> getSightSeeingSpotOfProvincePage(Long id, PaginationRequest pagination) {
+        getProvinceById(id);
+        List<SightseeingSpot> sightseeingSpots = sightseeingSpotService.getSightseeingSpotsByProvinceId(id);
+
+        PaginationRespDTO<SightseeingSpotRespDTO> result = new PaginationRespDTO<SightseeingSpotRespDTO>();
+
+        result.setTotal(Long.valueOf(sightseeingSpots.size()));
+        result.setPage(pagination.getPage());
+        result.setItemsPerPage(pagination.getItemsPerPage());
+        Pageable pageable = PageRequest.of(pagination.getPage(), pagination.getItemsPerPage());
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), sightseeingSpots.size());
+
+        List<SightseeingSpot> paginatedList = sightseeingSpots.subList(start, end);
+        Page<SightseeingSpot> SightseeingSpotPage = new PageImpl<>(paginatedList, pageable, sightseeingSpots.size());
+
+        result.setData(
+                SightseeingSpotPage.getContent().stream()
+                        .map(SightseeingSpotRespDTO::convert)
+                        .collect(Collectors.toList()));
+        return result;
     }
 
     public SightseeingSpot addNewSightseeingSpot(Long provinceId, SightseeingSpotDTO sightseeingSpotDTO) {

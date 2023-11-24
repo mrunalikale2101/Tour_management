@@ -17,6 +17,7 @@ public class TourRespDTO {
     private Date departureDate;
     private Integer duration;
     private String departureLocation;
+    private String destinationLocation;
     private TourGuide guide;
     private Integer availableSeats;
     private String gatheringAddress;
