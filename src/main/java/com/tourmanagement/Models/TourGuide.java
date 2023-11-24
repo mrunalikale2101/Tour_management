@@ -1,6 +1,7 @@
 package com.tourmanagement.Models;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -30,8 +31,8 @@ public class TourGuide {
     @Column(nullable = false, name = "id_card")
     private String idCard;
 
-    @JsonIgnore
-    @OneToMany(mappedBy = "guide", cascade = CascadeType.REMOVE, fetch = FetchType.LAZY)
+    @JsonManagedReference
+    @OneToMany(mappedBy = "guide", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private List<Tour> tours;
 
     @PreRemove
