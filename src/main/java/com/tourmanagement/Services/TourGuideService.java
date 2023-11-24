@@ -82,4 +82,9 @@ public class TourGuideService {
 
         return tourGuideRepository.save(tourGuideNeedUpdate);
     }
+
+    public void deleteTourGuide(Long id) {
+        getTourGuideById(id);
+        tourGuideRepository.deleteById(id);
+    }
 }

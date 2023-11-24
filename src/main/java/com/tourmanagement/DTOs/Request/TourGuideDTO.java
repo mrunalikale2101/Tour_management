@@ -18,10 +18,9 @@ public class TourGuideDTO implements Serializable {
     private String address;
 
     @NotNull(message = "Phone Number cannot be null!")
-    @Size(min = 10, max = 10, message = "Phone number must have exactly 10 characters")
     private String phoneNumber;
 
-    @Email(message = "Email is not suitable!")
+    @NotNull(message = "Email is not null!")
     private String email;
 
     @NotNull(message = "Id card cannot be null!")

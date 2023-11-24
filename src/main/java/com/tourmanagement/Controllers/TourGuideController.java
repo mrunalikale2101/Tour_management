@@ -41,7 +41,6 @@ public class TourGuideController {
     @PostMapping()
     public TourGuide handleCreateNewTourGuide(@RequestBody @Valid TourGuideDTO tourGuideDTO) {
         TourGuide newTourGuide = tourGuideService.createNewTourGuide(tourGuideDTO);
-
         return newTourGuide;
     }
 
@@ -57,5 +56,11 @@ public class TourGuideController {
         PaginationRespDTO<TourGuideRespDTO> tourGuides = tourGuideService.getAllTourGuidePagination(filterTourGuide);
 
         return tourGuides;
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteReview(@PathVariable Long id) {
+        tourGuideService.deleteTourGuide(id);
+        return "TourGuide with [%s] deleted successfully!".formatted(id);
     }
 }
