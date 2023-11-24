@@ -3,6 +3,7 @@ package com.tourmanagement.Services;
 import com.tourmanagement.DTOs.Request.TourGuideDTO;
 import com.tourmanagement.Models.TourGuide;
 import com.tourmanagement.Repositorys.TourGuideRepository;
+import com.tourmanagement.Shared.Utils.EntityDtoConverter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -16,10 +17,13 @@ public class TourGuideService {
     private final TourGuideRepository tourGuideRepository;
     private final ModelMapper modelMapper;
 
+    private final EntityDtoConverter entityDtoConverter;
+
     @Autowired
-    public TourGuideService(TourGuideRepository tourGuideRepository, ModelMapper modelMapper) {
+    public TourGuideService(TourGuideRepository tourGuideRepository, ModelMapper modelMapper, EntityDtoConverter entityDtoConverter) {
         this.tourGuideRepository = tourGuideRepository;
         this.modelMapper = modelMapper;
+        this.entityDtoConverter = entityDtoConverter;
     }
 
     public TourGuide getTourGuideById(Long id) {

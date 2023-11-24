@@ -100,6 +100,11 @@ public class TourService {
         updatedTour = tourRepository.save(updatedTour);
         updatedTour.setId(id);
 
+        if (tourPayload.getGuide_id() != null) {
+            TourGuide guide = tourGuideService.getTourGuideById(tourPayload.getGuide_id());
+            updatedTour.setGuide(guide);
+        }
+
         List<String> images = getImages(id);
         updatedTour.setImages(Converter.convertListImagesToJson(images));
 
@@ -171,12 +176,6 @@ public class TourService {
         return tourRepository.findAll(pageable);
     }
 
-    public List<TourRespDTO> getTourRespDTOsByPage(int page, int size) {
-        Page<Tour> tourPage = getToursByPage(page, size);
-        return tourPage.getContent().stream()
-                .map(entityDtoConverter::convertToTourRespDTO)
-                .collect(Collectors.toList());
-    }
 
     public PaginationRespDTO<TourRespDTO> getAllTour(PaginationRequest pagination) {
         PaginationRespDTO<TourRespDTO> result = new PaginationRespDTO<TourRespDTO>();
