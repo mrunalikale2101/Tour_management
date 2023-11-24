@@ -16,15 +16,12 @@ import java.util.List;
 public class EntityDtoConverter {
 
     private final ModelMapper modelMapper;
-    private final TourGuideService tourGuideService;
-
     private final SightseeingSpotService sightseeingSpotService;
 
     @Autowired
-    public EntityDtoConverter(ModelMapper modelMapper, TourGuideService tourGuideService, SightseeingSpotService sightseeingSpotService)
+    public EntityDtoConverter(ModelMapper modelMapper, SightseeingSpotService sightseeingSpotService)
     {
         this.modelMapper = modelMapper;
-        this.tourGuideService = tourGuideService;
         this.sightseeingSpotService = sightseeingSpotService;
     }
 
@@ -62,8 +59,6 @@ public class EntityDtoConverter {
     public TourRespDTO convertToTourRespDTO(Tour tour) {
         TourRespDTO dto = modelMapper.map(tour, TourRespDTO.class);
 
-        System.out.println(tour.getIdSightSeeing());
-
         List<SightseeingSpot> sightseeingSpots = new ArrayList<>();
 
         if (tour.getIdSightSeeing() == null){
@@ -71,7 +66,6 @@ public class EntityDtoConverter {
         } else {
             List<String> string_id = Converter.convertJsonIDToListSightSeeing(tour.getIdSightSeeing());
             for (String id: string_id){
-                System.out.println(id);
                 SightseeingSpot sightseeingSpot = sightseeingSpotService.getSightSeeingSpotById(Long.parseLong(id));
                 sightseeingSpots.add(sightseeingSpot);
             }
@@ -83,14 +77,14 @@ public class EntityDtoConverter {
             dto.setImages(Converter.convertJsonImagesToListImages(tour.getImages()));
         }
 
-        if (tour.getGuide() != null) {
-            TourGuide guide = tourGuideService.getTourGuideById(tour.getGuide().getId());
-
-            if (guide != null) {
-                TourGuide guideDTO = modelMapper.map(guide, TourGuide.class);
-                dto.setGuide(guideDTO);
-            }
-        }
+//        if (tour.getGuide() != null) {
+//            TourGuide guide = tourGuideService.getTourGuideById(tour.getGuide().getId());
+//
+//            if (guide != null) {
+//                TourGuide guideDTO = modelMapper.map(guide, TourGuide.class);
+//                dto.setGuide(guideDTO);
+//            }
+//        }
         return dto;
     }
 }

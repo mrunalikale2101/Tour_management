@@ -19,7 +19,7 @@ public class SightseeingSpot {
     @Column(nullable = false)
     private String address;
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "province_id")
     @JsonIgnore
     private Province province;
