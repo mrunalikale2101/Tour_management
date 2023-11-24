@@ -3,6 +3,7 @@ package com.tourmanagement.DTOs.Response;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tourmanagement.Models.Customer;
+import com.tourmanagement.Models.Discount;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -22,4 +23,6 @@ public class BookedTourRespDTO {
     private Date bookingDate;
     private String status;
     private String note;
+    private boolean isPaid;
+    private double totalMoney;
 }
