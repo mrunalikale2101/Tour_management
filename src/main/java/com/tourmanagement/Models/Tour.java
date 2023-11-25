@@ -25,11 +25,18 @@ public class Tour {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date departureDate;
 
+    @Column(nullable = false, name = "end_date")
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private Date endDate;
+
     @Column(nullable = false)
     private Integer duration;
 
     @Column(columnDefinition = "TEXT")
     private String departureLocation;
+
+    @Column(columnDefinition = "TEXT", name = "destination_location")
+    private String destinationLocation;
 
     @Column(name = "registered_seats", nullable = false)
     private Integer registeredSeats = 0;
@@ -37,7 +44,7 @@ public class Tour {
     @Column(name = "available_seats", nullable = false)
     private Integer availableSeats;
 
-    @Column(columnDefinition = "json")
+    @Column(columnDefinition = "json", name = "sightseeing_id_list")
     private String idSightSeeing;
 
     @JsonBackReference

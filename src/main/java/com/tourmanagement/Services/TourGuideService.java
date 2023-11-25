@@ -11,7 +11,7 @@ import com.tourmanagement.Models.Discount;
 import com.tourmanagement.Models.Tour;
 import com.tourmanagement.Models.TourGuide;
 import com.tourmanagement.Repositorys.TourGuideRepository;
-import com.tourmanagement.Shared.Types.EnumStatusDiscount;
+
 import com.tourmanagement.Shared.Utils.EntityDtoConverter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +30,6 @@ public class TourGuideService {
     private final TourGuideRepository tourGuideRepository;
     private final ModelMapper modelMapper;
     private final EntityDtoConverter entityDtoConverter;
-
 
     @Autowired
     public TourGuideService(TourGuideRepository tourGuideRepository, ModelMapper modelMapper, EntityDtoConverter entityDtoConverter) {

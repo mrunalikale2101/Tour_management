@@ -13,10 +13,13 @@ import java.util.List;
 public class TourRespDTO {
     private Long id;
     private String name;
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @JsonFormat(pattern = "dd/MM/yyyy", timezone = "GMT+7")
     private Date departureDate;
+    @JsonFormat(pattern = "dd/MM/yyyy", timezone = "GMT+7")
+    private Date endDate;
     private Integer duration;
     private String departureLocation;
+    private String destinationLocation;
     private TourGuide guide;
     private Integer availableSeats;
     private String gatheringAddress;

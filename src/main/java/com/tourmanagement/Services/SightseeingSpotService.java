@@ -1,14 +1,23 @@
 package com.tourmanagement.Services;
 
+import com.tourmanagement.DTOs.Payload.PaginationRequest;
 import com.tourmanagement.DTOs.Request.SightseeingSpotDTO;
+import com.tourmanagement.DTOs.Response.PaginationRespDTO;
+import com.tourmanagement.DTOs.Response.SightseeingSpotRespDTO;
+import com.tourmanagement.DTOs.Response.TourRespDTO;
 import com.tourmanagement.Models.SightseeingSpot;
+import com.tourmanagement.Models.Tour;
 import com.tourmanagement.Repositorys.SightseeingSpotRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class SightseeingSpotService {
@@ -26,10 +35,21 @@ public class SightseeingSpotService {
         return sightseeingSpot;
     }
 
-    public List<SightseeingSpot> getSightseeingSpots() {
-        List<SightseeingSpot> sightseeingSpots = sightseeingSpotRepository.findAll();
+    public PaginationRespDTO<SightseeingSpotRespDTO> getSightseeingSpots(PaginationRequest pagination) {
 
-        return sightseeingSpots;
+        PaginationRespDTO<SightseeingSpotRespDTO> result = new PaginationRespDTO<SightseeingSpotRespDTO>();
+        result.setTotal(sightseeingSpotRepository.count());
+        result.setPage(pagination.getPage());
+        result.setItemsPerPage(pagination.getItemsPerPage());
+        Pageable pageable = PageRequest.of(pagination.getPage(), pagination.getItemsPerPage());
+
+        Page<SightseeingSpot> SightseeingSpotPage = sightseeingSpotRepository.findAll(pageable);
+        result.setData(
+                SightseeingSpotPage.getContent().stream()
+                        .map(SightseeingSpotRespDTO::convert)
+                        .collect(Collectors.toList()));
+
+        return result;
     }
 
     public List<SightseeingSpot> getSightseeingSpotsByProvinceId(Long provinceId) {

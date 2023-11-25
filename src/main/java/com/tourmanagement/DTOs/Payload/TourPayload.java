@@ -38,7 +38,15 @@ public class TourPayload {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date departureDate;
 
+    @NotNull(message = "End Date cannot be null")
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private Date endDate;
+
+    @NotNull(message = "Departure Location cannot be null")
     private String departureLocation;
+
+    @NotNull(message = "Destination Location cannot be null")
+    private String destinationLocation;
 
     private MultipartFile[] images;
 
@@ -57,6 +65,7 @@ public class TourPayload {
         tourDTO.setPrice(this.getPrice());
         tourDTO.setDepartureDate(this.getDepartureDate());
         tourDTO.setDepartureLocation(this.getDepartureLocation());
+        tourDTO.setDestinationLocation(this.getDestinationLocation());
         tourDTO.setGuide_id(this.getGuide_id());
         tourDTO.setIdSightSeeing(this.getIdSightSeeing());
         return tourDTO;

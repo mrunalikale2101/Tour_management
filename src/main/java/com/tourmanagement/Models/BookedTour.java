@@ -33,4 +33,14 @@ public class BookedTour {
 
     @Column(nullable = true)
     private String note;
+
+    @Column(name = "is_paid", columnDefinition = "BOOLEAN DEFAULT false")
+    private boolean isPaid;
+
+    @ManyToOne(fetch = FetchType.EAGER)
+    @JoinColumn(name = "discount_id")
+    private Discount discount;
+
+    @Column(name = "total_money", columnDefinition = "DOUBLE DEFAULT 0.0")
+    private Double totalMoney;
 }

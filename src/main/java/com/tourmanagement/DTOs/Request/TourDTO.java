@@ -34,9 +34,15 @@ public class TourDTO {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date departureDate;
 
+    @NotNull(message = "End Date cannot be null")
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private Date endDate;
+
     private String images;
 
     private String departureLocation;
+
+    private String destinationLocation;
 
     @NotNull(message = "Guide cannot be null")
     private Long guide_id;

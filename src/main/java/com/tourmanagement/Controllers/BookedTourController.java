@@ -7,7 +7,6 @@ import com.tourmanagement.DTOs.Request.UpdateStatusBookedTourDTO;
 import com.tourmanagement.DTOs.Response.BookedTourRespDTO;
 import com.tourmanagement.DTOs.Response.PaginationRespDTO;
 import com.tourmanagement.Services.BookedTourService;
-import jakarta.mail.MessagingException;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -69,5 +68,12 @@ public class BookedTourController {
         bookedTourService.deleteBookedTour(id);
 
         return "BookedTour with [%S] deleted successfully!".formatted(id);
+    }
+
+    @PostMapping("/{id}/request-payment")
+    public String sendRequestPaymentToCustomer(@PathVariable Long id) {
+        bookedTourService.handleSendRequestToUser(id);
+
+        return "Send mail to remind customer about payment successfully";
     }
 }

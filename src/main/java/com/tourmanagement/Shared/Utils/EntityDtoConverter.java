@@ -16,8 +16,6 @@ import java.util.List;
 public class EntityDtoConverter {
 
     private final ModelMapper modelMapper;
-    //private final TourGuideService tourGuideService;
-
     private final SightseeingSpotService sightseeingSpotService;
 
     @Autowired
@@ -68,7 +66,6 @@ public class EntityDtoConverter {
         } else {
             List<String> string_id = Converter.convertJsonIDToListSightSeeing(tour.getIdSightSeeing());
             for (String id: string_id){
-                System.out.println(id);
                 SightseeingSpot sightseeingSpot = sightseeingSpotService.getSightSeeingSpotById(Long.parseLong(id));
                 sightseeingSpots.add(sightseeingSpot);
             }
@@ -94,6 +91,7 @@ public class EntityDtoConverter {
     public TourGuideRespDTO convertToTourGuideRespDTO(TourGuide tourGuide) {
         TourGuideRespDTO dto = modelMapper.map(tourGuide, TourGuideRespDTO.class);
         dto.setTours(tourGuide.getTours());
+
         return dto;
     }
 }
