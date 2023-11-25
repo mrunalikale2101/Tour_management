@@ -8,6 +8,7 @@ import com.tourmanagement.DTOs.Response.PaginationRespDTO;
 import com.tourmanagement.DTOs.Response.TourGuideRespDTO;
 import com.tourmanagement.DTOs.Response.TourRespDTO;
 import com.tourmanagement.Models.Discount;
+import com.tourmanagement.Models.Tour;
 import com.tourmanagement.Models.TourGuide;
 import com.tourmanagement.Repositorys.TourGuideRepository;
 import com.tourmanagement.Shared.Types.EnumStatusDiscount;
@@ -87,4 +88,5 @@ public class TourGuideService {
         getTourGuideById(id);
         tourGuideRepository.deleteById(id);
     }
+
 }
