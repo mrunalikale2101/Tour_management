@@ -1,15 +1,14 @@
 package com.tourmanagement.Controllers;
 
+import com.tourmanagement.DTOs.Payload.FilterRevenue;
 import com.tourmanagement.DTOs.Response.*;
 import com.tourmanagement.Services.BookedTourService;
 import com.tourmanagement.Services.DashboardService;
 import com.tourmanagement.Services.TourService;
+import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.ResponseStatus;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
@@ -39,8 +38,8 @@ public class DashboardController {
     }
 
     @GetMapping("revenues")
-    public List<RevenueRespDTO> handleGetRevenuresPerWeek() {
-        return  bookedTourService.getRevenuesSevenNearestDate();
+    public List<RevenueRespDTO> handleGetRevenues(@Valid @ModelAttribute FilterRevenue filterRevenue) {
+        return  bookedTourService.getRevenuesFromDateToDate(filterRevenue);
     }
 
     @GetMapping("top-amazing-province")

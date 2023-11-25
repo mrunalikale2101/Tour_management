@@ -2,6 +2,7 @@ package com.tourmanagement.Services;
 
 
 import com.tourmanagement.DTOs.Payload.FilterBookedTour;
+import com.tourmanagement.DTOs.Payload.FilterRevenue;
 import com.tourmanagement.DTOs.Request.BookedTourDTO;
 import com.tourmanagement.DTOs.Request.UpdateStatusBookedTourDTO;
 import com.tourmanagement.DTOs.Response.BookedTourRespDTO;
@@ -22,6 +23,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.server.ResponseStatusException;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -186,13 +188,51 @@ public class BookedTourService {
         bookedTourRepository.deleteById(id);
     }
 
-    public List<RevenueRespDTO> getRevenuesSevenNearestDate() {
-        var nearestDates = Helper.getNearestDates(7);
+    public List<RevenueRespDTO> getRevenuesFromDateToDate(FilterRevenue filterRevenue) {
+        var nearestDates = Helper.getDateList(filterRevenue.getStartDate(), filterRevenue.getEndDate());
 
         return bookedTourDao.revenues(nearestDates);
     }
 
     public List<TopProvinceRespDTO> getTopTheMostAmazingProvinces() {
         return bookedTourDao.theMostAmazingProvinces();
+    }
+
+    public Long countBookedTourByDate(Date date) {
+        return bookedTourDao.countBookedTourByDate(date);
+    }
+
+    public void handleSendRequestToUser(Long id) {
+        BookedTour bookedTour = getBookedTourById(id);
+        bookedTour = calculateTotalMoney(bookedTour);
+
+        String subject = "[IMPORTANT] PAYMENT YOUR BOOKED TOUR";
+        String htmlContent =
+                "<h2>Dear Mr/Mrs %s,</h2>" +
+                        "<div>We are very happy to serve you. We are writing this letter to inform that you have a tour booked on %s [%s] it still do not pay.</div>" +
+                        "<div>Please pay us a fee of about %s for us to confirm this tour for you. After payment, please access our application to confirm your payment</div>" +
+                        "<div>Thanks for your choice</div>";
+        htmlContent = String.format(
+                htmlContent,
+                bookedTour.getBookingDate(),
+                bookedTour.getTour().getName(),
+                bookedTour.getTotalMoney()
+        );
+        try {
+            mailService.sendMailResponseUser(bookedTour.getCustomer().getEmail(), subject, htmlContent);
+        } catch (MessagingException mex) {
+            throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Send mail failure");
+        }
+    }
+
+    public BookedTour calculateTotalMoney(BookedTour bookedTour) {
+        Double totalMoney = bookedTour.getTour().getPrice();
+
+        if (bookedTour.getDiscount() != null) {
+            totalMoney = ((100 - bookedTour.getDiscount().getDiscountPercentage()) / 100) * bookedTour.getTour().getPrice();
+        }
+
+        bookedTour.setTotalMoney(totalMoney);
+        return bookedTour;
     }
 }

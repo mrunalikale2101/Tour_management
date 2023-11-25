@@ -30,7 +30,7 @@ public class Tour {
     @Column(columnDefinition = "TEXT")
     private String departureLocation;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", name = "destination_location")
     private String destinationLocation;
 
     @Column(name = "registered_seats", nullable = false)
@@ -39,7 +39,7 @@ public class Tour {
     @Column(name = "available_seats", nullable = false)
     private Integer availableSeats;
 
-    @Column(columnDefinition = "json")
+    @Column(columnDefinition = "json", name = "sightseeing_id_list")
     private String idSightSeeing;
 
     @ManyToOne(fetch = FetchType.EAGER)

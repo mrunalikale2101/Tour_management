@@ -10,8 +10,8 @@ import com.tourmanagement.Models.BookedTour;
 import com.tourmanagement.Models.QBookedTour;
 import com.tourmanagement.Models.QTour;
 import com.tourmanagement.Shared.Types.EnumStatusBookedTour;
-import com.tourmanagement.Shared.Utils.Converter;
 import org.springframework.stereotype.Repository;
+import java.util.Calendar;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -26,11 +26,16 @@ public class BookedTourImpl extends BasicDao implements BookedTourDao {
 
         query = query.from(bookedTour);
 
-        if(filter.getStartDate() != null && filter.getEndDate() != null) {
-            query = query.where(bookedTour.bookingDate.between(filter.getStartDate(), filter.getEndDate()));
+        if (filter.getStartDate() != null && filter.getEndDate() != null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(filter.getEndDate());
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            Date endDate = calendar.getTime();
+
+            query = query.where(bookedTour.bookingDate.between(filter.getStartDate(), endDate));
         }
 
-        if(filter.getStatus() != null) {
+        if (filter.getStatus() != null) {
             query = query.where(bookedTour.status.eq(EnumStatusBookedTour.fromString(filter.getStatus())));
         }
 
@@ -45,11 +50,16 @@ public class BookedTourImpl extends BasicDao implements BookedTourDao {
 
         query = query.from(bookedTour);
 
-        if(filter.getStartDate() != null && filter.getEndDate() != null) {
-            query = query.where(bookedTour.bookingDate.between(filter.getStartDate(), filter.getEndDate()));
+        if (filter.getStartDate() != null && filter.getEndDate() != null) {
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(filter.getEndDate());
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            Date endDate = calendar.getTime();
+
+            query = query.where(bookedTour.bookingDate.between(filter.getStartDate(), endDate));
         }
 
-        if(filter.getStatus() != null) {
+        if (filter.getStatus() != null) {
             query = query.where(bookedTour.status.eq(EnumStatusBookedTour.fromString(filter.getStatus())));
         }
 
@@ -66,18 +76,20 @@ public class BookedTourImpl extends BasicDao implements BookedTourDao {
         query = query.from(bookedTour).leftJoin(bookedTour.tour, tour);
 
         for (Date date : dates) {
-            List<BookedTour> matchedBookedTours = query
-                    .where(bookedTour.bookingDate.eq(Converter.convertDateUtilToSqlDate(date)))
-                    .fetch();
+            Calendar calendar = Calendar.getInstance();
+            calendar.setTime(date);
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
+            Date nextDate = calendar.getTime();
 
-            if (matchedBookedTours.size() == 0) {
-                result.add(new RevenueRespDTO(0, date));
-                continue;
-            }
+            List<BookedTour> matchedBookedTours = query
+                    .where(bookedTour.bookingDate.between(date, nextDate)
+                            .and(bookedTour.isPaid.eq(true))
+                            .and(bookedTour.status.eq(EnumStatusBookedTour.CONFIRMED)))
+                    .fetch();
 
             Double totalMoney = 0.0;
             for (BookedTour _bookedTour : matchedBookedTours) {
-                totalMoney += _bookedTour.getTour().getPrice();
+                totalMoney += _bookedTour.getTotalMoney();
             }
 
             result.add(new RevenueRespDTO(totalMoney, date));
@@ -91,18 +103,33 @@ public class BookedTourImpl extends BasicDao implements BookedTourDao {
         JPAQuery<BookedTour> query = new JPAQuery<>(_entityManager);
         QBookedTour bookedTour = QBookedTour.bookedTour;
 
-        List<Tuple> dataResp = query.select(bookedTour.tour.province, bookedTour.tour.province.count())
+        List<Tuple> dataResp = query.select(bookedTour.tour.destinationLocation, bookedTour.tour.destinationLocation.count())
                 .from(bookedTour)
-                .groupBy(bookedTour.tour.province)
+                .groupBy(bookedTour.tour.destinationLocation)
                 .fetch();
 
         return dataResp.stream()
                 .map(tuple -> {
-                    Province province = tuple.get(bookedTour.tour.province);
-                    Long tourCount = tuple.get(bookedTour.tour.province.count());
+                    String province = tuple.get(bookedTour.tour.destinationLocation);
+                    Long tourCount = tuple.get(bookedTour.tour.destinationLocation.count());
                     assert province != null;
-                    return new TopProvinceRespDTO(province.getName(), tourCount);
+                    return new TopProvinceRespDTO(province, tourCount);
                 })
                 .toList();
+    }
+
+    @Override
+    public Long countBookedTourByDate(Date date) {
+        JPAQuery<BookedTour> query = new JPAQuery<>(_entityManager);
+        QBookedTour bookedTour = QBookedTour.bookedTour;
+
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(date);
+        calendar.add(Calendar.DAY_OF_MONTH, -1);
+        Date previousDay = calendar.getTime();
+
+        query = query.from(bookedTour).where(bookedTour.bookingDate.between(previousDay, date));
+
+        return query.fetchCount();
     }
 }

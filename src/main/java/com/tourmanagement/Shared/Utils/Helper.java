@@ -1,20 +1,22 @@
 package com.tourmanagement.Shared.Utils;
 
-import java.time.LocalDate;
-import java.time.ZoneId;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 
 public class Helper {
-    public static List<Date> getNearestDates(int numberOfDate) {
-        List<Date> result = new ArrayList<>();
+    public static List<Date> getDateList(Date startDate, Date endDate) {
+        List<Date> dateList = new ArrayList<>();
 
-        for (int i = 0; i < numberOfDate; i++) {
-            LocalDate previousDate = LocalDate.now().minusDays(i);
-            result.add(Date.from(previousDate.atStartOfDay(ZoneId.systemDefault()).toInstant()));
+        Calendar calendar = Calendar.getInstance();
+        calendar.setTime(startDate);
+
+        while (!calendar.getTime().after(endDate)) {
+            dateList.add(calendar.getTime());
+            calendar.add(Calendar.DAY_OF_MONTH, 1);
         }
 
-        return result;
+        return dateList;
     }
 }
