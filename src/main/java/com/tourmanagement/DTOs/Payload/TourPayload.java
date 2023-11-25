@@ -38,6 +38,10 @@ public class TourPayload {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date departureDate;
 
+    @NotNull(message = "End Date cannot be null")
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private Date endDate;
+
     @NotNull(message = "Departure Location cannot be null")
     private String departureLocation;
 
