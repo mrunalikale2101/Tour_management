@@ -77,14 +77,6 @@ public class EntityDtoConverter {
             dto.setImages(Converter.convertJsonImagesToListImages(tour.getImages()));
         }
 
-//        if (tour.getGuide() != null) {
-//            TourGuide guide = tourGuideService.getTourGuideById(tour.getGuide().getId());
-//
-//            if (guide != null) {
-//                TourGuide guideDTO = modelMapper.map(guide, TourGuide.class);
-//                dto.setGuide(guideDTO);
-//            }
-//        }
         return dto;
     }
 }

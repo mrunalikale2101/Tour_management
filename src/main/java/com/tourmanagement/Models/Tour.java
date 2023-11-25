@@ -24,6 +24,10 @@ public class Tour {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date departureDate;
 
+    @Column(nullable = false, name = "end_date")
+    @JsonFormat(pattern = "dd/MM/yyyy")
+    private Date endDate;
+
     @Column(nullable = false)
     private Integer duration;
 
