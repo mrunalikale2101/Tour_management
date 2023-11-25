@@ -1,11 +1,11 @@
 package com.tourmanagement.DTOs.Payload;
 
-import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
@@ -13,9 +13,9 @@ import java.util.Date;
 @NoArgsConstructor
 @Data
 public class FilterBookedTour {
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date startDate;
-    @JsonFormat(pattern = "dd/MM/yyyy")
+    @DateTimeFormat(pattern = "dd/MM/yyyy")
     private Date endDate;
     private String status;
     @PositiveOrZero(message = "Page must be a positive number or Zero number")

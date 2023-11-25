@@ -42,5 +42,5 @@ public class BookedTour {
     private Discount discount;
 
     @Column(name = "total_money", columnDefinition = "DOUBLE DEFAULT 0.0")
-    private double totalMoney;
+    private Double totalMoney;
 }

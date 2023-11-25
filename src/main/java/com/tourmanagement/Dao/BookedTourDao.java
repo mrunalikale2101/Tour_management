@@ -13,4 +13,5 @@ public interface BookedTourDao {
     public Long filterCount(FilterBookedTour filter);
     public List<RevenueRespDTO> revenues(List<Date> dates);
     public List<TopProvinceRespDTO> theMostAmazingProvinces();
+    public Long countBookedTourByDate(Date date);
 }
