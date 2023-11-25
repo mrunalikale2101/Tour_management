@@ -6,6 +6,8 @@ import com.tourmanagement.DTOs.Request.BookedTourDTO;
 import com.tourmanagement.DTOs.Request.UpdateStatusBookedTourDTO;
 import com.tourmanagement.DTOs.Response.BookedTourRespDTO;
 import com.tourmanagement.DTOs.Response.PaginationRespDTO;
+import com.tourmanagement.DTOs.Response.RevenueRespDTO;
+import com.tourmanagement.DTOs.Response.TopProvinceRespDTO;
 import com.tourmanagement.Dao.BookedTourDao;
 import com.tourmanagement.Models.BookedTour;
 import com.tourmanagement.Models.Customer;
@@ -13,6 +15,7 @@ import com.tourmanagement.Models.Tour;
 import com.tourmanagement.Repositorys.BookedTourRepository;
 import com.tourmanagement.Shared.Types.EnumStatusBookedTour;
 import com.tourmanagement.Shared.Utils.EntityDtoConverter;
+import com.tourmanagement.Shared.Utils.Helper;
 import jakarta.mail.MessagingException;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
@@ -115,7 +118,7 @@ public class BookedTourService {
                     mailService.sendMailResponseUser(bookedTour.getCustomer().getEmail(), subject, htmlContent);
                     Tour tour = bookedTour.getTour();
                     tour.setRegisteredSeats(tour.getRegisteredSeats() - 1);
-                    //tourService.updateTour(tour);
+                    tourService.saveTour(tour);
                 }
                 default -> throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Cannot handle!");
             }
@@ -183,4 +186,13 @@ public class BookedTourService {
         bookedTourRepository.deleteById(id);
     }
 
+    public List<RevenueRespDTO> getRevenuesSevenNearestDate() {
+        var nearestDates = Helper.getNearestDates(7);
+
+        return bookedTourDao.revenues(nearestDates);
+    }
+
+    public List<TopProvinceRespDTO> getTopTheMostAmazingProvinces() {
+        return bookedTourDao.theMostAmazingProvinces();
+    }
 }
