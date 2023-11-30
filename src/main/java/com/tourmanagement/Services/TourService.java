@@ -5,13 +5,14 @@ import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tourmanagement.DTOs.Payload.PaginationRequest;
 import com.tourmanagement.DTOs.Payload.TourPayload;
+import com.tourmanagement.DTOs.Request.ScheduleTourReqDTO;
 import com.tourmanagement.DTOs.Request.SearchTourDTO;
 import com.tourmanagement.DTOs.Request.TourDTO;
-import com.tourmanagement.DTOs.Response.BookedTourRespDTO;
 import com.tourmanagement.DTOs.Response.PaginationRespDTO;
+import com.tourmanagement.DTOs.Response.ScheduleTourRespDTO;
 import com.tourmanagement.DTOs.Response.TourRespDTO;
 import com.tourmanagement.Dao.Impl.TourDaoImpl;
-import com.tourmanagement.Models.BookedTour;
+import com.tourmanagement.Models.ScheduleTour;
 import com.tourmanagement.Models.Tour;
 import com.tourmanagement.Models.TourGuide;
 import com.tourmanagement.Repositorys.TourRepository;
@@ -22,7 +23,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -40,17 +40,18 @@ public class TourService {
     private final EntityDtoConverter entityDtoConverter;
     private final ImageService imageService;
     private final TourDaoImpl tourDao;
-
     private final TourGuideService tourGuideService;
+    private final ScheduleTourService scheduleTourService;
 
     @Autowired
-    public TourService(TourRepository tourRepository, ModelMapper modelMapper, EntityDtoConverter entityDtoConverter, ImageService imageService,TourDaoImpl tourDao, TourGuideService tourGuideService) {
+    public TourService(TourRepository tourRepository, ModelMapper modelMapper, EntityDtoConverter entityDtoConverter, ImageService imageService,TourDaoImpl tourDao, TourGuideService tourGuideService, ScheduleTourService scheduleTourService) {
         this.tourRepository = tourRepository;
         this.modelMapper = modelMapper;
         this.entityDtoConverter = entityDtoConverter;
         this.imageService = imageService;
         this.tourDao = tourDao;
         this.tourGuideService = tourGuideService;
+        this.scheduleTourService = scheduleTourService;
     }
 
     public List<TourRespDTO> getTours(){
@@ -176,7 +177,6 @@ public class TourService {
         return tourRepository.findAll(pageable);
     }
 
-
     public PaginationRespDTO<TourRespDTO> getAllTour(PaginationRequest pagination) {
         PaginationRespDTO<TourRespDTO> result = new PaginationRespDTO<TourRespDTO>();
         result.setTotal(tourRepository.count());
@@ -193,4 +193,28 @@ public class TourService {
         return result;
     }
 
+    public ScheduleTourRespDTO handleCreateScheduleForSpecificTour(Long id, ScheduleTourReqDTO scheduleTourReqDTO) {
+        Tour tour = this.getTourById(id);
+        ScheduleTour scheduleToCreate = new ScheduleTour();
+        scheduleToCreate.setTitle(scheduleTourReqDTO.getTitle());
+        scheduleToCreate.setDescription(scheduleTourReqDTO.getDescription());
+        scheduleToCreate.setDay(scheduleTourReqDTO.getDay());
+        scheduleToCreate.setTour(tour);
+
+        return this.scheduleTourService.handleCreate(scheduleToCreate);
+    }
+
+    public void handleDeleteScheduleOfSpecificTour(Long id, Long scheduleId) {
+        this.getTourById(id);
+        this.scheduleTourService.handleDelete(scheduleId);
+    }
+
+    public ScheduleTourRespDTO handleUpdateScheduleOfSpecificTour(Long id, Long scheduleId, ScheduleTourReqDTO scheduleTourReqDTO) {
+        this.getTourById(id);
+        return this.scheduleTourService.handleUpdate(scheduleId, scheduleTourReqDTO);
+    }
+
+    public List<ScheduleTourRespDTO> handleGetSchedulesOfSpecificTour(Long id) {
+        return this.scheduleTourService.handleGetSchedulesOfSpecificTour(id);
+    }
 }
