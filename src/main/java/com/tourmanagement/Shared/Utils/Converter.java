@@ -1,5 +1,7 @@
 package com.tourmanagement.Shared.Utils;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import com.tourmanagement.Models.SightseeingSpot;
@@ -16,6 +18,18 @@ public class Converter {
         }.getType();
 
         return gson.fromJson(jsonImages, listType);
+    }
+
+    private static final ObjectMapper objectMapper = new ObjectMapper();
+
+    public static String convertListSightSeeingToJson(List<String> idSightseeingList) {
+        try {
+            return objectMapper.writeValueAsString(idSightseeingList);
+        } catch (JsonProcessingException e) {
+            // Xử lý ngoại lệ nếu có
+            e.printStackTrace();
+            return null; // hoặc throw một ngoại lệ khác tùy thuộc vào yêu cầu của bạn
+        }
     }
 
     public static List<String> convertJsonIDToListSightSeeing(String jsonID) {
