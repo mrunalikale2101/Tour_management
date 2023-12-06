@@ -9,9 +9,11 @@ import com.tourmanagement.DTOs.Request.SearchTourDTO;
 import com.tourmanagement.DTOs.Request.TourDTO;
 import com.tourmanagement.DTOs.Response.BookedTourRespDTO;
 import com.tourmanagement.DTOs.Response.PaginationRespDTO;
+import com.tourmanagement.DTOs.Response.SightseeingSpotRespDTO;
 import com.tourmanagement.DTOs.Response.TourRespDTO;
 import com.tourmanagement.Dao.Impl.TourDaoImpl;
 import com.tourmanagement.Models.BookedTour;
+import com.tourmanagement.Models.SightseeingSpot;
 import com.tourmanagement.Models.Tour;
 import com.tourmanagement.Models.TourGuide;
 import com.tourmanagement.Repositorys.TourRepository;
@@ -19,10 +21,7 @@ import com.tourmanagement.Shared.Utils.Converter;
 import com.tourmanagement.Shared.Utils.EntityDtoConverter;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
-import org.springframework.data.domain.Sort;
+import org.springframework.data.domain.*;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
@@ -97,7 +96,6 @@ public class TourService {
 
         TourDTO tourDTO = tourPayload.convertTourPayloadToTourDTO();
         Tour updatedTour = modelMapper.map(tourDTO, Tour.class);
-        updatedTour = tourRepository.save(updatedTour);
         updatedTour.setId(id);
 
         if (tourPayload.getGuide_id() != null) {
@@ -148,6 +146,30 @@ public class TourService {
                 .collect(Collectors.toList());
     }
 
+    public PaginationRespDTO<TourRespDTO> searchToursPage(String name, PaginationRequest pagination) {
+        List<Tour> tourbyName = tourRepository.searchTourbyName(name);
+
+        PaginationRespDTO<TourRespDTO> result = new PaginationRespDTO<>();
+        result.setTotal(Long.valueOf(tourbyName.size()));
+        result.setPage(pagination.getPage());
+        result.setItemsPerPage(pagination.getItemsPerPage());
+
+        Pageable pageable = PageRequest.of(pagination.getPage(), pagination.getItemsPerPage());
+
+        int start = (int) pageable.getOffset();
+        int end = Math.min((start + pageable.getPageSize()), tourbyName.size());
+
+        List<Tour> paginatedList = tourbyName.subList(start, end);
+        Page<Tour> SightseeingSpotPage = new PageImpl<>(paginatedList, pageable, tourbyName.size());
+
+        result.setData(
+                SightseeingSpotPage.getContent().stream()
+                        .map(entityDtoConverter::convertToTourRespDTO)
+                        .collect(Collectors.toList()));
+
+        return result;
+    }
+
     public List<Tour> filterToursByPrice(Double minPrice, Double maxPrice) {
         return tourRepository.findByPriceBetween(minPrice, maxPrice);
     }
@@ -171,11 +193,6 @@ public class TourService {
     }
 
 
-    public Page<Tour> getToursByPage(int page, int size) {
-        PageRequest pageable = PageRequest.of(page, size);
-        return tourRepository.findAll(pageable);
-    }
-
 
     public PaginationRespDTO<TourRespDTO> getAllTour(PaginationRequest pagination) {
         PaginationRespDTO<TourRespDTO> result = new PaginationRespDTO<TourRespDTO>();
@@ -192,5 +209,20 @@ public class TourService {
 
         return result;
     }
+
+    public void removeSightseeing(Long sightseeingId) {
+        List<Tour> toursContainingSightseeing = tourRepository.findToursBySightseeingId(sightseeingId);
+
+        for (Tour tour : toursContainingSightseeing) {
+            List<String> idSightseeingList = Converter.convertJsonIDToListSightSeeing(tour.getIdSightSeeing());
+
+            idSightseeingList.remove(String.valueOf(sightseeingId));
+
+            tour.setIdSightSeeing(Converter.convertListSightSeeingToJson(idSightseeingList));
+
+            tourRepository.save(tour);
+        }
+    }
+
 
 }

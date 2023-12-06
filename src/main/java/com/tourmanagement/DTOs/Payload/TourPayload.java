@@ -64,6 +64,7 @@ public class TourPayload {
         tourDTO.setGatheringAddress(this.getGatheringAddress());
         tourDTO.setPrice(this.getPrice());
         tourDTO.setDepartureDate(this.getDepartureDate());
+        tourDTO.setEndDate(this.getEndDate());
         tourDTO.setDepartureLocation(this.getDepartureLocation());
         tourDTO.setDestinationLocation(this.getDestinationLocation());
         tourDTO.setGuide_id(this.getGuide_id());

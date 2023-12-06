@@ -1,5 +1,6 @@
 package com.tourmanagement.Repositorys;
 
+import com.tourmanagement.Dao.Impl.TourRepositoryCustom;
 import com.tourmanagement.Models.Tour;
 import org.springframework.data.domain.Page;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -10,7 +11,7 @@ import org.springframework.data.domain.Pageable;
 import java.util.Date;
 import java.util.List;
 
-public interface TourRepository extends JpaRepository<Tour, Long> {
+public interface TourRepository extends JpaRepository<Tour, Long>, TourRepositoryCustom {
 
     List<Tour> findByPriceBetween(Double minPrice, Double maxPrice);
 
@@ -20,4 +21,7 @@ public interface TourRepository extends JpaRepository<Tour, Long> {
     @Query("select t from Tour t where DATE(t.departureDate) = :date")
     List<Tour> findToDayTour(@Param("date") java.sql.Date date);
 
+    @Query("SELECT t FROM Tour t WHERE (:name IS NULL OR t.name LIKE %:name%)")
+    List<Tour> searchTourbyName(
+            @Param("name") String name);
 }

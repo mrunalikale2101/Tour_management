@@ -74,11 +74,24 @@ public class TourController {
         return "Tour with [%S] deleted successfully!".formatted(id);
     }
 
+    @DeleteMapping("/delete-sightseeing/{id}")
+    public String handleDelete(@PathVariable Long id) {
+        tourService.removeSightseeing(id);
+        return "Tour with [%S] deleted successfully!".formatted(id);
+    }
+
     @GetMapping("/search")
     public List<TourRespDTO> searchTours(
             @ModelAttribute SearchTourDTO searchTourDTO) {
         List<TourRespDTO> tours = tourService.searchTours(searchTourDTO);
         return tours;
+    }
+
+
+    @GetMapping("/search-page")
+    public PaginationRespDTO<TourRespDTO> searchToursPage(
+            @RequestParam(value = "name", required = false) String name, @ModelAttribute PaginationRequest paginationRequest) {
+        return tourService.searchToursPage(name, paginationRequest);
     }
 
     @GetMapping("/filter")
