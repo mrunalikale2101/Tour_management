@@ -50,10 +50,10 @@ public class TourPayload {
 
     private MultipartFile[] images;
 
-    @NotNull(message = "idSightSeeing cannot be null")
+    @NotNull(message = "Id SightSeeing cannot be null")
     private String idSightSeeing;
 
-    @NotNull(message = "Guide cannot be null")
+    @NotNull(message = "Guide_Id cannot be null")
     private Long guide_id;
 
     public TourDTO convertTourPayloadToTourDTO() {

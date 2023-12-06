@@ -46,6 +46,12 @@ public class ScheduleTourService {
         return entityConverter.convertToScheduleTourRespDTO(scheduleToDelete);
     }
 
+    public String handleDeleteByTourId(Long id) {
+        List<ScheduleTour> scheduleToDelete = this.scheduleTourRepository.findSchedulesOfSpecificTour(id);
+        this.scheduleTourRepository.deleteAll(scheduleToDelete);
+        return "Delete Schedule Tour successfully!!!";
+    }
+
     public ScheduleTourRespDTO handleUpdate(Long id, ScheduleTourReqDTO scheduleReqData) {
         ScheduleTour scheduleToUpdate = this.scheduleTourRepository.findById(id)
                 .orElseThrow(() -> new ResponseStatusException(HttpStatus.NOT_FOUND, "Schedule with id [%s] is not found".formatted(id)));

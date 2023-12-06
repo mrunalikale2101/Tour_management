@@ -1,9 +1,12 @@
 package com.tourmanagement.Controllers;
 
+import com.tourmanagement.DTOs.Payload.FilterDiscount;
+import com.tourmanagement.DTOs.Payload.FilterTour;
 import com.tourmanagement.DTOs.Payload.PaginationRequest;
 import com.tourmanagement.DTOs.Payload.TourPayload;
 import com.tourmanagement.DTOs.Request.ScheduleTourReqDTO;
 import com.tourmanagement.DTOs.Request.SearchTourDTO;
+import com.tourmanagement.DTOs.Response.DiscountRespDTO;
 import com.tourmanagement.DTOs.Response.PaginationRespDTO;
 import com.tourmanagement.DTOs.Response.ScheduleTourRespDTO;
 import com.tourmanagement.DTOs.Response.TourRespDTO;
@@ -34,9 +37,21 @@ public class TourController {
         return tours;
     }
 
+    @GetMapping("/pagination")
+    public PaginationRespDTO<TourRespDTO> getAllTourPagination(@ModelAttribute @Valid FilterTour filterTour) {
+        PaginationRespDTO<TourRespDTO> tours = tourService.getAllTourPagination(filterTour);
+
+        return tours;
+    }
+
     @GetMapping
     public PaginationRespDTO<TourRespDTO> getAllTour(@ModelAttribute PaginationRequest paginationRequest) {
         return tourService.getAllTour(paginationRequest);
+    }
+
+    @GetMapping("/sort")
+    public PaginationRespDTO<TourRespDTO> getAllTourSortedByName(@ModelAttribute PaginationRequest paginationRequest, String type) {
+        return tourService.getAllTourSortedByName(paginationRequest, type);
     }
 
     @GetMapping("/{id}")

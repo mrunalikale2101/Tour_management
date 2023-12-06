@@ -3,24 +3,20 @@ package com.tourmanagement.Services;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.tourmanagement.DTOs.Payload.FilterDiscount;
+import com.tourmanagement.DTOs.Payload.FilterTour;
 import com.tourmanagement.DTOs.Payload.PaginationRequest;
 import com.tourmanagement.DTOs.Payload.TourPayload;
 import com.tourmanagement.DTOs.Request.ScheduleTourReqDTO;
 import com.tourmanagement.DTOs.Request.SearchTourDTO;
 import com.tourmanagement.DTOs.Request.TourDTO;
-import com.tourmanagement.DTOs.Response.PaginationRespDTO;
-import com.tourmanagement.DTOs.Response.SightseeingSpotRespDTO;
+import com.tourmanagement.DTOs.Response.*;
+import com.tourmanagement.Dao.Impl.TourDaoImpl;
+import com.tourmanagement.Models.*;
 import com.tourmanagement.DTOs.Response.TourRespDTO;
 import com.tourmanagement.Dao.Impl.TourDaoImpl;
-import com.tourmanagement.Models.BookedTour;
-import com.tourmanagement.Models.SightseeingSpot;
-import com.tourmanagement.DTOs.Response.ScheduleTourRespDTO;
-import com.tourmanagement.DTOs.Response.TourRespDTO;
-import com.tourmanagement.Dao.Impl.TourDaoImpl;
-import com.tourmanagement.Models.ScheduleTour;
-import com.tourmanagement.Models.Tour;
-import com.tourmanagement.Models.TourGuide;
 import com.tourmanagement.Repositorys.TourRepository;
+import com.tourmanagement.Shared.Types.EnumStatusDiscount;
 import com.tourmanagement.Shared.Utils.Converter;
 import com.tourmanagement.Shared.Utils.EntityDtoConverter;
 import org.modelmapper.ModelMapper;
@@ -37,6 +33,7 @@ import org.springframework.web.server.ResponseStatusException;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Service
@@ -143,6 +140,7 @@ public class TourService {
 
     public void deleteTour(Long id) {
         getTourById(id);
+        scheduleTourService.handleDeleteByTourId(id);
         tourRepository.deleteById(id);
     }
 
@@ -223,6 +221,36 @@ public class TourService {
         return result;
     }
 
+
+    public PaginationRespDTO<TourRespDTO> getAllTourSortedByName(PaginationRequest pagination, String type) {
+        PaginationRespDTO<TourRespDTO> result = new PaginationRespDTO<>();
+        result.setPage(pagination.getPage());
+        result.setItemsPerPage(pagination.getItemsPerPage());
+        Sort sort;
+        // Sort theo tên tăng dần
+        if (Objects.equals(type, "desc")){
+            sort = Sort.by(Sort.Order.desc("name"));
+        } else {
+            sort = Sort.by(Sort.Order.asc("name"));
+        }
+
+
+        // Tạo Pageable object với Sort
+        Pageable pageable = PageRequest.of(pagination.getPage(), pagination.getItemsPerPage(), sort);
+
+        // Lấy danh sách Tour theo trang và sắp xếp
+        Page<Tour> tourPage = tourRepository.findAll(pageable);
+
+        result.setTotal(tourPage.getTotalElements());
+        result.setData(
+                tourPage.getContent().stream()
+                        .map(entityDtoConverter::convertToTourRespDTO)
+                        .collect(Collectors.toList()));
+
+        return result;
+    }
+
+
     public void removeSightseeing(Long sightseeingId) {
         List<Tour> toursContainingSightseeing = tourRepository.findToursBySightseeingId(sightseeingId);
 
@@ -261,5 +289,21 @@ public class TourService {
 
     public List<ScheduleTourRespDTO> handleGetSchedulesOfSpecificTour(Long id) {
         return this.scheduleTourService.handleGetSchedulesOfSpecificTour(id);
+    }
+
+    public PaginationRespDTO<TourRespDTO> getAllTourPagination(FilterTour filterTour) {
+        PaginationRespDTO<TourRespDTO> result = new PaginationRespDTO<TourRespDTO>();
+        result.setPage(filterTour.getPage());
+        result.setTotal(tourRepository.countTourByFilterTour(filterTour.getStartDate(), filterTour.getEndDate(), filterTour.getMinPrice(), filterTour.getMaxPrice()));
+        result.setItemsPerPage(filterTour.getItemsPerPage());
+
+        Pageable pageable = PageRequest.of(filterTour.getPage(), filterTour.getItemsPerPage());
+        List<Tour> tours = tourRepository.findToursByFilterTour(filterTour.getStartDate(), filterTour.getEndDate(), filterTour.getMinPrice(), filterTour.getMaxPrice(), pageable);
+
+        result.setData(tours.stream()
+                .map(entityDtoConverter::convertToTourRespDTO)
+                .collect(Collectors.toList()));
+
+        return result;
     }
 }
