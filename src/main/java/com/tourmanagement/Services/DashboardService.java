@@ -4,6 +4,8 @@ import com.tourmanagement.DTOs.Response.QuantityStatisticResp;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 public class DashboardService {
     private final  TourService tourService;
@@ -22,7 +24,7 @@ public class DashboardService {
         quantityStatisticResp.setQuantityCustomer(customerService.getCountCustomers());
         quantityStatisticResp.setQuantityTour(tourService.getCountTour());
         quantityStatisticResp.setQuantityBookedTour(bookedTourService.getCountBookedTour());
-        quantityStatisticResp.setQuantityBookedTourToday(10L);
+        quantityStatisticResp.setQuantityBookedTourToday(bookedTourService.countBookedTourByDate(new Date()));
 
         return quantityStatisticResp;
     }

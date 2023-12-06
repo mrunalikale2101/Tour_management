@@ -1,5 +1,6 @@
 package com.tourmanagement.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.tourmanagement.Shared.Types.EnumStatusTour;
 import com.tourmanagement.Shared.Types.EnumTransportModeTour;
@@ -24,7 +25,7 @@ public class Tour {
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date departureDate;
 
-    @Column(nullable = false, name = "end_date")
+    @Column(nullable = true, name = "end_date")
     @JsonFormat(pattern = "dd/MM/yyyy")
     private Date endDate;
 
@@ -34,7 +35,7 @@ public class Tour {
     @Column(columnDefinition = "TEXT")
     private String departureLocation;
 
-    @Column(columnDefinition = "TEXT")
+    @Column(columnDefinition = "TEXT", name = "destination_location")
     private String destinationLocation;
 
     @Column(name = "registered_seats", nullable = false)
@@ -43,9 +44,10 @@ public class Tour {
     @Column(name = "available_seats", nullable = false)
     private Integer availableSeats;
 
-    @Column(columnDefinition = "json")
+    @Column(columnDefinition = "json", name = "sightseeing_id_list")
     private String idSightSeeing;
 
+    @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "guide_id")
     private TourGuide guide;

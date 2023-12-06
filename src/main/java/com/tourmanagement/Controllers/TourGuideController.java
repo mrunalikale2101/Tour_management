@@ -1,6 +1,11 @@
 package com.tourmanagement.Controllers;
 
+import com.tourmanagement.DTOs.Payload.FilterDiscount;
+import com.tourmanagement.DTOs.Payload.FilterTourGuide;
 import com.tourmanagement.DTOs.Request.TourGuideDTO;
+import com.tourmanagement.DTOs.Response.DiscountRespDTO;
+import com.tourmanagement.DTOs.Response.PaginationRespDTO;
+import com.tourmanagement.DTOs.Response.TourGuideRespDTO;
 import com.tourmanagement.Models.TourGuide;
 import com.tourmanagement.Services.TourGuideService;
 import jakarta.validation.Valid;
@@ -36,7 +41,6 @@ public class TourGuideController {
     @PostMapping()
     public TourGuide handleCreateNewTourGuide(@RequestBody @Valid TourGuideDTO tourGuideDTO) {
         TourGuide newTourGuide = tourGuideService.createNewTourGuide(tourGuideDTO);
-
         return newTourGuide;
     }
 
@@ -46,4 +50,18 @@ public class TourGuideController {
 
         return updatedTourGuide;
     }
+
+    @GetMapping("/pagination")
+    public PaginationRespDTO<TourGuideRespDTO> getAllTourGuidePagination(@ModelAttribute @Valid FilterTourGuide filterTourGuide) {
+        PaginationRespDTO<TourGuideRespDTO> tourGuides = tourGuideService.getAllTourGuidePagination(filterTourGuide);
+
+        return tourGuides;
+    }
+
+    @DeleteMapping("/{id}")
+    public String deleteReview(@PathVariable Long id) {
+        tourGuideService.deleteTourGuide(id);
+        return "TourGuide with [%s] deleted successfully!".formatted(id);
+    }
+
 }

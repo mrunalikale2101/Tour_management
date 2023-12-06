@@ -3,12 +3,10 @@ package com.tourmanagement.Shared.Utils;
 import com.tourmanagement.DTOs.Response.*;
 import com.tourmanagement.Models.*;
 import com.tourmanagement.Services.SightseeingSpotService;
-import com.tourmanagement.Services.TourGuideService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -77,6 +75,25 @@ public class EntityDtoConverter {
             dto.setImages(Converter.convertJsonImagesToListImages(tour.getImages()));
         }
 
+//        if (tour.getGuide() != null) {
+//            TourGuide guide = tourGuideService.getTourGuideById(tour.getGuide().getId());
+//
+//            if (guide != null) {
+//                TourGuide guideDTO = modelMapper.map(guide, TourGuide.class);
+//                dto.setGuide(guideDTO);
+//            }
+//        }
         return dto;
+    }
+
+    public TourGuideRespDTO convertToTourGuideRespDTO(TourGuide tourGuide) {
+        TourGuideRespDTO dto = modelMapper.map(tourGuide, TourGuideRespDTO.class);
+        dto.setTours(tourGuide.getTours());
+
+        return dto;
+    }
+
+    public ScheduleTourRespDTO convertToScheduleTourRespDTO(ScheduleTour scheduleTour) {
+        return modelMapper.map(scheduleTour, ScheduleTourRespDTO.class);
     }
 }

@@ -1,25 +1,28 @@
 package com.tourmanagement.DTOs.Payload;
 
+import jakarta.validation.constraints.AssertTrue;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Positive;
 import jakarta.validation.constraints.PositiveOrZero;
 import lombok.AllArgsConstructor;
-import lombok.Data;
+import lombok.Getter;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import java.util.Date;
 
-@AllArgsConstructor
 @NoArgsConstructor
-@Data
-public class FilterBookedTour {
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date startDate;
-    @DateTimeFormat(pattern = "dd/MM/yyyy")
-    private Date endDate;
-    private String status;
+@AllArgsConstructor
+@Getter
+@Setter
+public class FilterTourGuide {
+
     @PositiveOrZero(message = "Page must be a positive number or Zero number")
+    @NotNull(message = "Page cannot be null")
     private int page;
     @Positive(message = "Items per page must be a positive number")
+    @NotNull(message = "ItemsPerPage cannot be null")
     private int itemsPerPage;
+
 }

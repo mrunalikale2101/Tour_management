@@ -1,29 +1,20 @@
 package com.tourmanagement.Controllers;
 
-import com.fasterxml.jackson.core.type.TypeReference;
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.tourmanagement.DTOs.Payload.PaginationRequest;
 import com.tourmanagement.DTOs.Payload.TourPayload;
+import com.tourmanagement.DTOs.Request.ScheduleTourReqDTO;
 import com.tourmanagement.DTOs.Request.SearchTourDTO;
-import com.tourmanagement.DTOs.Request.TourDTO;
-import com.tourmanagement.DTOs.Response.BookedTourRespDTO;
 import com.tourmanagement.DTOs.Response.PaginationRespDTO;
+import com.tourmanagement.DTOs.Response.ScheduleTourRespDTO;
 import com.tourmanagement.DTOs.Response.TourRespDTO;
 import com.tourmanagement.Models.Tour;
 import com.tourmanagement.Services.TourService;
 import jakarta.validation.Valid;
-import org.springframework.data.domain.Page;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.File;
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
@@ -32,6 +23,7 @@ import java.util.List;
 public class TourController {
     private final TourService tourService;
 
+    @Autowired
     public TourController(TourService tourService) {
         this.tourService = tourService;
     }
@@ -118,6 +110,25 @@ public class TourController {
 
     }
 
+    @PostMapping("/{id}/schedules")
+    public ScheduleTourRespDTO createSchedule(@PathVariable Long id, @Valid @RequestBody ScheduleTourReqDTO scheduleReqData) {
+       return this.tourService.handleCreateScheduleForSpecificTour(id, scheduleReqData);
+    }
 
+    @DeleteMapping("/{id}/schedules/{scheduleId}")
+    public String deleteSchedule(@PathVariable Long id, @PathVariable Long scheduleId) {
+        this.tourService.handleDeleteScheduleOfSpecificTour(id, scheduleId);
 
+        return "Schedule with id [%S] deleted from Tour id [%s] successfully!".formatted(scheduleId, id);
+    }
+
+    @PutMapping("/{id}/schedules/{scheduleId}")
+    public ScheduleTourRespDTO updateSchedule(@PathVariable Long id, @PathVariable Long scheduleId, @Valid @RequestBody ScheduleTourReqDTO scheduleReqData) {
+        return this.tourService.handleUpdateScheduleOfSpecificTour(id, scheduleId, scheduleReqData);
+    }
+
+    @GetMapping("/{id}/schedules")
+    public List<ScheduleTourRespDTO> getSchedules(@PathVariable Long id) {
+        return this.tourService.handleGetSchedulesOfSpecificTour(id);
+    }
 }
