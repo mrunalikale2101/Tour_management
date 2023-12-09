@@ -294,10 +294,34 @@ public class TourService {
     public PaginationRespDTO<TourRespDTO> getAllTourPagination(FilterTour filterTour) {
         PaginationRespDTO<TourRespDTO> result = new PaginationRespDTO<TourRespDTO>();
         result.setPage(filterTour.getPage());
+        String typeSort = filterTour.getTypeSort();
+        Sort sort;
+        if (Objects.equals(typeSort, "ASC")){
+            if (filterTour.getStartDate() == null && filterTour.getEndDate() == null &&
+                    filterTour.getMinPrice() != null && filterTour.getMaxPrice() != null) {
+                sort = Sort.by(Sort.Order.asc("price"));
+            } else if (filterTour.getStartDate() != null && filterTour.getEndDate() != null &&
+                    filterTour.getMinPrice() == null && filterTour.getMaxPrice() == null) {
+                sort = Sort.by(Sort.Order.asc("departureDate"));
+            } else {
+                sort = Sort.by(Sort.Order.asc("name"));
+            }
+        } else{
+            if (filterTour.getStartDate() == null && filterTour.getEndDate() == null &&
+                    filterTour.getMinPrice() != null && filterTour.getMaxPrice() != null) {
+                sort = Sort.by(Sort.Order.desc("price"));
+            } else if (filterTour.getStartDate() != null && filterTour.getEndDate() != null &&
+                    filterTour.getMinPrice() == null && filterTour.getMaxPrice() == null) {
+                sort = Sort.by(Sort.Order.desc("departureDate"));
+            } else {
+                sort = Sort.by(Sort.Order.desc("name"));
+            }
+        }
+
         result.setTotal(tourRepository.countTourByFilterTour(filterTour.getStartDate(), filterTour.getEndDate(), filterTour.getMinPrice(), filterTour.getMaxPrice()));
         result.setItemsPerPage(filterTour.getItemsPerPage());
 
-        Pageable pageable = PageRequest.of(filterTour.getPage(), filterTour.getItemsPerPage());
+        Pageable pageable = PageRequest.of(filterTour.getPage(), filterTour.getItemsPerPage(), sort);
         List<Tour> tours = tourRepository.findToursByFilterTour(filterTour.getStartDate(), filterTour.getEndDate(), filterTour.getMinPrice(), filterTour.getMaxPrice(), pageable);
 
         result.setData(tours.stream()
