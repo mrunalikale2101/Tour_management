@@ -40,7 +40,6 @@ public class TourController {
     @GetMapping("/pagination")
     public PaginationRespDTO<TourRespDTO> getAllTourPagination(@ModelAttribute @Valid FilterTour filterTour) {
         PaginationRespDTO<TourRespDTO> tours = tourService.getAllTourPagination(filterTour);
-
         return tours;
     }
 

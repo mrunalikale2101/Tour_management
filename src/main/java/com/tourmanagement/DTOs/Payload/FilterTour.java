@@ -30,6 +30,7 @@ public class FilterTour {
     @Positive(message = "Items per page must be a positive number")
     @NotNull(message = "ItemsPerPage cannot be null")
     private int itemsPerPage;
+    private String typeSort;
 
     @AssertTrue(message = "Start date must be before or equal to end date")
     private boolean isStartDateBeforeEndDate() {
