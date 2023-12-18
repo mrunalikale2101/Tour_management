@@ -19,6 +19,7 @@ import com.tourmanagement.Repositorys.TourRepository;
 import com.tourmanagement.Shared.Types.EnumStatusDiscount;
 import com.tourmanagement.Shared.Utils.Converter;
 import com.tourmanagement.Shared.Utils.EntityDtoConverter;
+import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.*;
@@ -137,7 +138,7 @@ public class TourService {
             return new ArrayList<>();
         }
     }
-
+    @Transactional
     public void deleteTour(Long id) {
         getTourById(id);
         scheduleTourService.handleDeleteByTourId(id);

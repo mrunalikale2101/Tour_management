@@ -31,7 +31,7 @@ public class TourGuide {
     private String idCard;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "guide", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "guide",fetch = FetchType.EAGER)
     private List<Tour> tours;
 
     @PreRemove
