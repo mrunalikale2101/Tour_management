@@ -17,7 +17,7 @@ public class TourRepositoryCustomImpl implements TourRepositoryCustom {
 
     @Override
     public List<Tour> findToursBySightseeingId(Long sightseeingId) {
-        String nativeQuery = "SELECT * FROM tours t, JSON_TABLE(t.id_sight_seeing, '$[*]' COLUMNS (sightseeingId INT PATH '$')) AS jt WHERE jt.sightseeingId = :sightseeingId";
+        String nativeQuery = "SELECT * FROM tours t, JSON_TABLE(t.sightseeing_id_list, '$[*]' COLUMNS (sightseeingId INT PATH '$')) AS jt WHERE jt.sightseeingId = :sightseeingId";
         Query query = entityManager.createNativeQuery(nativeQuery, Tour.class);
         query.setParameter("sightseeingId", sightseeingId);
         return query.getResultList();

@@ -1,6 +1,6 @@
 package com.tourmanagement.Models;
 
-import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.*;
 import jakarta.persistence.*;
 import lombok.Data;
 
@@ -10,6 +10,7 @@ import java.util.List;
 @Entity
 @Data
 @Table(name = "tour_guides")
+@JsonIgnoreProperties("tours")
 public class TourGuide {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -31,7 +32,7 @@ public class TourGuide {
     private String idCard;
 
     @JsonManagedReference
-    @OneToMany(mappedBy = "guide", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToMany(mappedBy = "guide", fetch = FetchType.EAGER)
     private List<Tour> tours;
 
     @PreRemove

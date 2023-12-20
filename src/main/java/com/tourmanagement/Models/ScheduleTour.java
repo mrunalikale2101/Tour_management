@@ -14,7 +14,7 @@ public class ScheduleTour {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.REMOVE)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "tour_id")
     private Tour tour;
     @Column(nullable = false)

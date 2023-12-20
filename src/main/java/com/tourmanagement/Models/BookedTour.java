@@ -1,5 +1,7 @@
 package com.tourmanagement.Models;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import com.tourmanagement.DTOs.Response.TourRespDTO;
 import com.tourmanagement.Shared.Types.EnumStatusBookedTour;
 import jakarta.persistence.*;
 import lombok.Data;
@@ -29,6 +31,7 @@ public class BookedTour {
     private Date bookingDate = new Date();
 
     @Enumerated(EnumType.STRING)
+    @Column(length = 20)
     private EnumStatusBookedTour status = EnumStatusBookedTour.PENDING;
 
     @Column(nullable = true)

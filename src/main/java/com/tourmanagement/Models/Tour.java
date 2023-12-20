@@ -1,7 +1,6 @@
 package com.tourmanagement.Models;
 
-import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonFormat;
+import com.fasterxml.jackson.annotation.*;
 import com.tourmanagement.Shared.Types.EnumStatusTour;
 import com.tourmanagement.Shared.Types.EnumTransportModeTour;
 import jakarta.persistence.*;
@@ -47,7 +46,6 @@ public class Tour {
     @Column(columnDefinition = "json", name = "sightseeing_id_list")
     private String idSightSeeing;
 
-    @JsonBackReference
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "guide_id")
     private TourGuide guide;
