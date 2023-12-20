@@ -274,7 +274,6 @@ public class TourService {
         scheduleToCreate.setDescription(scheduleTourReqDTO.getDescription());
         scheduleToCreate.setDay(scheduleTourReqDTO.getDay());
         scheduleToCreate.setTour(tour);
-
         return this.scheduleTourService.handleCreate(scheduleToCreate);
     }
 
