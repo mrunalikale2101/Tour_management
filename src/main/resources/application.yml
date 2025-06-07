@@ -1,41 +1,23 @@
 server:
-  port: 8080
+  port: 8082
   servlet:
-    contextPath: /api/v1
-  error:
-    include-message: always
-    include-stacktrace: never
+    context-path: /api/v1
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/tour_management
+    url: jdbc:mysql://localhost:3307/tour_management?createDatabaseIfNotExist=true&useSSL=false
     username: root
-    password: 1234
+    password: cdac
+    driver-class-name: com.mysql.cj.jdbc.Driver
   jpa:
     hibernate:
       ddl-auto: update
-    open-in-view: false
-  main:
-    web-application-type: servlet
-    banner-mode: off
-  mail:
-    host: smtp.gmail.com
-    port: 587
-    username: truongvanhao159@gmail.com
-    password:
+    show-sql: true
     properties:
-      mail:
-        smtp:
-          auth: true
-          starttls:
-            enable: true
+      hibernate:
+        dialect: org.hibernate.dialect.MySQLDialect
 
-
-jwt:
-  access:
-    key: u344qp/MlRfLr2iwJbnCntS1yqUpS7EULBUkoUuU+JI=
-  refresh:
-    key: t/bl0PnTRZ1C+Qa7OrOP8MMEfU2F1kdCAy+7GKR1O+o=
-
-app:
-  url: http://localhost:8080
+logging:
+  level:
+    root: INFO
+    com.tour.management: DEBUG 
